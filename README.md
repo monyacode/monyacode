@@ -4,6 +4,8 @@
 
 # MonyaCode
 
+**Website:** [monyacode.github.io/monyacode](https://monyacode.github.io/monyacode/)
+
 A fast, native Rust code editor and IDE for macOS, Linux, *BSD, and Windows.
 MonyaCode is designed to be reliable, distraction-free, hackable, and usable
 out of the box.
