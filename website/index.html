@@ -50,7 +50,7 @@
 <body>
   <div class="shell">
     <aside>
-      <a class="brand" href="#top"><img src="../assets/images/monyacode-logo-monochrome.png" alt=""> MonyaCode</a>
+      <a class="brand" href="#top"><img src="assets/images/monyacode-logo-monochrome.png" alt=""> MonyaCode</a>
       <input class="search" x-model="query" @keydown.escape="query=''" @keydown.window.ctrl.k.prevent="$refs.search.focus()" x-ref="search" placeholder="Quick jump (Ctrl K)">
       <div class="results" x-show="query" @click.outside="query=''" x-cloak>
         <template x-for="item in filtered" :key="item.id"><a :href="'#'+item.id" @click="query=''" x-text="item.label"></a></template>
@@ -65,7 +65,7 @@
       <div class="topbar"><a href="https://github.com/monyacode/monyacode">GitHub</a></div>
       <header class="hero">
         <div><div class="eyebrow">Native. Focused. Yours.</div><h1>Code with<br>cattitude.</h1><p class="lead">MonyaCode is a fast, native Rust editor for developers who want a focused workspace without telemetry, subscriptions, or distractions.</p><div class="actions"><a class="button primary" href="https://github.com/monyacode/monyacode/releases/latest">Get MonyaCode</a><a class="button" href="https://github.com/monyacode/monyacode">View source</a></div></div>
-        <img class="hero-art" src="../assets/images/monyacode-logo-monochrome.png" alt="MonyaCode cat logo">
+        <img class="hero-art" src="assets/images/monyacode-logo-monochrome.png" alt="MonyaCode cat logo">
       </header>
       <section id="download"><h2>Download</h2><p class="muted">Release downloads are served directly from GitHub. The latest release is the source of truth.</p><div class="grid"><div class="card"><h3>Linux Intel</h3><p>Debian package for x86_64 systems.</p><a class="button primary" :href="asset('linux-amd64')">Download .deb</a></div><div class="card"><h3>Linux ARM</h3><p>Debian package for ARM64 systems.</p><a class="button primary" :href="asset('linux-arm64')">Download .deb</a></div><div class="card"><h3>macOS</h3><p>Apple Silicon and Intel app bundles.</p><div class="actions"><a class="button primary" :href="asset('macos-arm64')">Apple Silicon</a><a class="button" :href="asset('macos-x86_64')">Intel</a></div></div><div class="card"><h3>Windows</h3><p>Ready-to-install Windows package.</p><a class="button primary" :href="asset('windows')">Download Windows</a></div><div class="card"><h3>All releases</h3><p>Browse every published build and checksum.</p><a class="button" href="https://github.com/monyacode/monyacode/releases">GitHub Releases</a></div></div></section>
       <section id="features"><h2>Built for focused work</h2><div class="grid"><div class="card"><h3>Native performance</h3><p>Rust and GPU-accelerated UI keep the editor responsive.</p></div><div class="card"><h3>Developer tools</h3><p>Git, LSP, debugging, remote development, and REPL workflows.</p></div><div class="card"><h3>Your workspace</h3><p>Vim and Helix modes, themes, keymaps, and extensions.</p></div></div></section>
