@@ -1,0 +1,75 @@
+[package]
+name = "git_ui"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+name = "git_ui"
+path = "src/git_ui.rs"
+
+[dependencies]
+anyhow.workspace = true
+app_actions.workspace = true
+askpass.workspace = true
+buffer_diff.workspace = true
+collections.workspace = true
+component.workspace = true
+db.workspace = true
+editor.workspace = true
+futures.workspace = true
+fuzzy.workspace = true
+git.workspace = true
+gpui.workspace = true
+itertools.workspace = true
+language.workspace = true
+linkify.workspace = true
+log.workspace = true
+markdown.workspace = true
+menu.workspace = true
+multi_buffer.workspace = true
+notifications.workspace = true
+panel.workspace = true
+picker.workspace = true
+project.workspace = true
+recent_projects.workspace = true
+remote.workspace = true
+schemars.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+settings.workspace = true
+smol.workspace = true
+strum.workspace = true
+theme.workspace = true
+time.workspace = true
+time_format.workspace = true
+ui.workspace = true
+util.workspace = true
+watch.workspace = true
+workspace.workspace = true
+zeroize.workspace = true
+
+[dev-dependencies]
+ctor.workspace = true
+editor = { workspace = true, features = ["test-support"] }
+gpui = { workspace = true, features = ["test-support"] }
+indoc.workspace = true
+pretty_assertions.workspace = true
+project = { workspace = true, features = ["test-support"] }
+rand.workspace = true
+settings = { workspace = true, features = ["test-support"] }
+unindent.workspace = true
+workspace = { workspace = true, features = ["test-support"] }
+zlog.workspace = true
+
+[features]
+default = []
+test-support = ["multi_buffer/test-support"]
+
+[lints]
+workspace = true
+
+[package.metadata.cargo-shear]
+ignored = ["component"]

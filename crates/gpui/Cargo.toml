@@ -1,0 +1,225 @@
+[package]
+name = "gpui"
+version.workspace = true
+edition.workspace = true
+description = "MonyaCode's GPU-accelerated UI framework"
+repository.workspace = true
+license = "Apache-2.0"
+keywords = ["desktop", "gui", "immediate"]
+categories = ["gui"]
+publish = true
+
+[lib]
+doctest = false
+path = "src/gpui.rs"
+
+[[example]]
+name = "hello_world"
+path = "examples/hello_world.rs"
+
+[[example]]
+name = "image"
+path = "examples/image/image.rs"
+
+[[example]]
+name = "input"
+path = "examples/input.rs"
+
+[[example]]
+name = "on_window_close_quit"
+path = "examples/on_window_close_quit.rs"
+
+[[example]]
+name = "opacity"
+path = "examples/opacity.rs"
+
+[[example]]
+name = "pattern"
+path = "examples/pattern.rs"
+
+[[example]]
+name = "set_menus"
+path = "examples/set_menus.rs"
+
+[[example]]
+name = "shadow"
+path = "examples/shadow.rs"
+
+[[example]]
+name = "svg"
+path = "examples/svg/svg.rs"
+
+[[example]]
+name = "tab_stop"
+path = "examples/tab_stop.rs"
+
+[[example]]
+name = "text"
+path = "examples/text.rs"
+
+[[example]]
+name = "text_wrapper"
+path = "examples/text_wrapper.rs"
+
+[[example]]
+name = "tree"
+path = "examples/tree.rs"
+
+[[example]]
+name = "uniform_list"
+path = "examples/uniform_list.rs"
+
+[[example]]
+name = "window_shadow"
+path = "examples/window_shadow.rs"
+
+[[example]]
+name = "grid_layout"
+path = "examples/grid_layout.rs"
+
+[[example]]
+name = "mouse_pressure"
+path = "examples/mouse_pressure.rs"
+
+[dependencies]
+anyhow.workspace = true
+async-task.workspace = true
+backtrace = { workspace = true, optional = true }
+bitflags = { workspace = true, optional = true }
+bytemuck = { workspace = true, optional = true }
+circular-buffer.workspace = true
+collections.workspace = true
+ctor.workspace = true
+derive_more.workspace = true
+etagere.workspace = true
+futures.workspace = true
+gpui_macros.workspace = true
+http_client.workspace = true
+image.workspace = true
+inventory.workspace = true
+itertools.workspace = true
+libc.workspace = true
+log.workspace = true
+lyon.workspace = true
+num_cpus.workspace = true
+parking.workspace = true
+parking_lot.workspace = true
+pin-project.workspace = true
+postage.workspace = true
+profiling.workspace = true
+rand = { workspace = true, optional = true }
+raw-window-handle.workspace = true
+refineable.workspace = true
+resvg = { workspace = true, default-features = false, features = ["memmap-fonts", "system-fonts", "text"] }
+schemars.workspace = true
+seahash.workspace = true
+semver.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+slotmap.workspace = true
+smallvec.workspace = true
+smol.workspace = true
+spin.workspace = true
+stacksafe.workspace = true
+strum.workspace = true
+sum_tree.workspace = true
+taffy.workspace = true
+thiserror.workspace = true
+unicode-segmentation.workspace = true
+url.workspace = true
+usvg = { workspace = true, default-features = false, features = ["text"] }
+util.workspace = true
+util_macros.workspace = true
+uuid.workspace = true
+waker-fn.workspace = true
+
+[dev-dependencies]
+env_logger.workspace = true
+lyon.workspace = true
+reqwest_client.workspace = true
+
+[target.'cfg(any(target_os = "linux", target_os = "freebsd"))'.dependencies]
+# Always used
+flume.workspace = true
+
+# Used in both windowing options
+ashpd = { workspace = true, optional = true }
+calloop.workspace = true
+cosmic-text = { workspace = true, optional = true }
+filedescriptor = { workspace = true, optional = true }
+open = { workspace = true, optional = true }
+swash.workspace = true
+wgpu = { workspace = true, optional = true }
+xkbcommon = { workspace = true, optional = true }
+
+# Wayland
+calloop-wayland-source = { workspace = true, optional = true }
+wayland-backend = { workspace = true, optional = true }
+wayland-client = { workspace = true, optional = true }
+wayland-cursor = { workspace = true, optional = true }
+wayland-protocols = { workspace = true, optional = true }
+wayland-protocols-plasma = { workspace = true, optional = true }
+wayland-protocols-wlr = { workspace = true, optional = true }
+
+# X11
+as-raw-xcb-connection = { workspace = true, optional = true }
+x11rb = { workspace = true, optional = true }
+# WARNING: If you change this, you must also publish a new version of zed-xim to crates.io
+xim = { package = "zed-xim", git = "https://github.com/zed-industries/xim-rs.git", rev = "16f35a2c881b815a2b6cdfd6687988e84f8447d8", version = "0.4.0-zed", features = ["x11rb-client", "x11rb-xcb", "std"], optional = true }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+block2.workspace = true
+bytemuck.workspace = true
+cosmic-text = { workspace = true, optional = true }
+dispatch2.workspace = true
+foreign-types.workspace = true
+log.workspace = true
+objc2.workspace = true
+objc2-app-kit.workspace = true
+objc2-color-sync.workspace = true
+objc2-core-foundation.workspace = true
+objc2-core-graphics.workspace = true
+objc2-foundation.workspace = true
+objc2-quartz-core.workspace = true
+swash.workspace = true
+wgpu.workspace = true
+
+[target.'cfg(target_os = "windows")'.dependencies]
+flume.workspace = true
+rand.workspace = true
+windows.workspace = true
+windows-core.workspace = true
+windows-numerics.workspace = true
+windows-registry.workspace = true
+
+[target.'cfg(target_os = "windows")'.build-dependencies]
+embed-resource.workspace = true
+windows-registry.workspace = true
+
+[features]
+default = ["cosmic-text", "wayland", "windows-manifest", "x11"]
+inspector = ["gpui_macros/inspector"]
+leak-detection = ["backtrace"]
+test-support = ["collections/test-support", "http_client/test-support", "leak-detection", "rand", "util/test-support", "wayland", "x11"]
+wayland = [
+  "ashpd/wayland",
+  "bitflags",
+  "bytemuck",
+  "calloop-wayland-source",
+  "cosmic-text",
+  "filedescriptor",
+  "open",
+  "wayland-backend",
+  "wayland-client",
+  "wayland-cursor",
+  "wayland-protocols",
+  "wayland-protocols-plasma",
+  "wayland-protocols-wlr",
+  "wgpu",
+  "xkbcommon"
+]
+windows-manifest = []
+x11 = ["as-raw-xcb-connection", "ashpd", "bytemuck", "cosmic-text", "filedescriptor", "open", "wgpu", "x11rb", "xim", "xkbcommon"]
+
+[lints]
+workspace = true

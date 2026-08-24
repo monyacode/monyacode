@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+version="-dev"
+if [[ "$FORGEJO_REF_TYPE" == "tag" ]]; then
+  version="-$FORGEJO_REF_NAME"
+else
+  version="-$FORGEJO_SHA"
+fi
+
+mkdir -p distdir
+cd crates/monyacode
+pycargoebuild -c --features --no-config --no-license --no-manifest --distdir ../../distdir --crate-tarball-path "../../monyacode${version}-crates.tar.xz" .
+cd ../..
+echo "name=monyacode${version}-crates.tar.xz" >> "$FORGEJO_OUTPUT"

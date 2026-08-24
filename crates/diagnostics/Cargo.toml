@@ -1,0 +1,49 @@
+[package]
+name = "diagnostics"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+doctest = false
+path = "src/diagnostics.rs"
+
+[dependencies]
+anyhow.workspace = true
+collections.workspace = true
+ctor.workspace = true
+editor.workspace = true
+gpui.workspace = true
+indoc.workspace = true
+itertools.workspace = true
+language.workspace = true
+log.workspace = true
+lsp.workspace = true
+markdown.workspace = true
+project.workspace = true
+rand.workspace = true
+serde_json.workspace = true
+settings.workspace = true
+text.workspace = true
+theme.workspace = true
+ui.workspace = true
+util.workspace = true
+workspace.workspace = true
+
+[dev-dependencies]
+editor = { workspace = true, features = ["test-support"] }
+gpui = { workspace = true, features = ["test-support"] }
+language = { workspace = true, features = ["test-support"] }
+lsp = { workspace = true, features = ["test-support"] }
+markdown = { workspace = true, features = ["test-support"] }
+pretty_assertions.workspace = true
+serde_json.workspace = true
+theme = { workspace = true, features = ["test-support"] }
+unindent.workspace = true
+workspace = { workspace = true, features = ["test-support"] }
+zlog.workspace = true
+
+[lints]
+workspace = true

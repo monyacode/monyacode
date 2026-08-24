@@ -1,0 +1,17 @@
+// MonyaCode settings
+//
+// For information on how to configure MonyaCode, see the MonyaCode
+// documentation: monyacode://docs/configuring-monyacode
+//
+// To see all of MonyaCode's default settings without changing your
+// custom settings, run `monyacode: open default settings` from the
+// command palette (cmd-shift-p / ctrl-shift-p)
+{
+  "ui_font_size": 14,
+  "buffer_font_size": 14,
+  "theme": {
+    "mode": "system",
+    "light": "Melange Light",
+    "dark": "Melange Dark",
+  },
+}

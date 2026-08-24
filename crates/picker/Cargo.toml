@@ -1,0 +1,32 @@
+[package]
+name = "picker"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+doctest = false
+path = "src/picker.rs"
+
+[dependencies]
+anyhow.workspace = true
+editor.workspace = true
+gpui.workspace = true
+menu.workspace = true
+schemars.workspace = true
+serde.workspace = true
+theme.workspace = true
+ui.workspace = true
+workspace.workspace = true
+
+[dev-dependencies]
+editor = { workspace = true, features = ["test-support"] }
+gpui = { workspace = true, features = ["test-support"] }
+
+[features]
+test-support = []
+
+[lints]
+workspace = true

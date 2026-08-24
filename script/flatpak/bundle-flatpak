@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+set -euxo pipefail
+cd "$(dirname "$0")/../.."
+shopt -s extglob
+
+script/bundle-linux --flatpak --tarball
+channel=$(<crates/monyacode/RELEASE_CHANNEL)
+if [[ "$channel" = "dev" ]]; then
+  archive="monyacode-dev-linux-$(uname -m).tar.gz"
+else
+  archive="monyacode-linux-$(uname -m).tar.gz"
+fi
+
+export CHANNEL="$channel"
+export ARCHIVE="$archive"
+export BRANDING_LIGHT="#b2d88f"
+export BRANDING_DARK="#4e4b5c"
+if [[ "$channel" == "dev" ]]; then
+    export APP_ID="app.liten.MonyaCodeDev"
+    export APP_NAME="MonyaCode Devel"
+    export ICON_SCALABLE="app.liten.MonyaCode.Devel.svg"
+    export ICON_SYMBOLIC="app.liten.MonyaCode-symbolic.svg"
+elif [[ "$channel" == "stable" ]]; then
+    export APP_ID="app.liten.MonyaCode"
+    export APP_NAME="MonyaCode"
+    export ICON_SCALABLE="app.liten.MonyaCode.svg"
+    export ICON_SYMBOLIC="app.liten.MonyaCode-symbolic.svg"
+else
+    echo "Invalid channel: '$channel'"
+    exit
+fi
+
+envsubst < "crates/monyacode/resources/flatpak/manifest-template.json" > "$APP_ID.json"
+flatpak-builder --user --install --force-clean build "$APP_ID.json"
+flatpak build-bundle ~/.local/share/flatpak/repo "target/release/$APP_ID.flatpak" "$APP_ID"
+echo "Created 'target/release/$APP_ID.flatpak'"

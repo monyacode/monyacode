@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -euxo pipefail
+
+if [[ $# -gt 0 ]]; then
+    echo "
+  Usage: ${0##*/}
+  Builds and installs monyacode onto your system into ~/.local, making it available as ~/.local/bin/monyacode.
+
+  Before running this you should ensure you have all the build dependencies installed with './script/linux'.
+  "
+    exit 1
+fi
+script/install.sh --build

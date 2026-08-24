@@ -1,0 +1,19 @@
+[package]
+name = "file_icons"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+doctest = false
+path = "src/file_icons.rs"
+
+[dependencies]
+gpui.workspace = true
+theme.workspace = true
+util.workspace = true
+
+[lints]
+workspace = true

@@ -1,0 +1,14 @@
+name = "Git Rebase"
+grammar = "git-rebase"
+path_suffixes = ["git-rebase-todo"]
+line_comments = ["# "]
+brackets = [
+  { start = "(", end = ")", close = true, newline = false },
+  { start = "`", end = "`", close = true, newline = false },
+  { start = "\"", end = "\"", close = true, newline = false },
+  { start = "'", end = "'", close = true, newline = false },
+  { start = "{", end = "}", close = true, newline = false },
+  { start = "[", end = "]", close = true, newline = false },
+]
+tab_size = 2
+rewrap_prefixes = ["[-*+]\\s+", "\\d+\\.\\s+", ">\\s*", "[-*+]\\s+\\[[\\sx]\\]\\s+"]

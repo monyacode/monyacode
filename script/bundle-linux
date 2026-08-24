@@ -1,0 +1,287 @@
+#!/usr/bin/env bash
+
+set -euxo pipefail
+shopt -s extglob
+
+help_info() {
+    echo "
+Usage: ${0##*/} [options]
+Build Linux packages for MonyaCode.
+
+At least one of --tarball, --deb, --AppImage, --arch or --rpm must be specified.
+
+Options:
+  -h, --help          Display this help and exit
+  --no-build          Skip building binaries (assume they're already built)
+  --no-build-remote   Skip building the remote_server binary
+  --flatpak           Set MONYACODE_BUNDLE_TYPE=flatpak so that this can be included in system info
+  --tarball           Build a release .tar.gz archive
+  --deb               Build a .deb package
+  --rpm               Build a .rpm package
+  --arch              Build an Arch package
+  --appimage          Build an AppImage
+  "
+}
+
+DO_BUILD=true
+BUILD_REMOTE=true
+DO_TARBALL=false
+DO_DEB=false
+DO_APPIMAGE=false
+DO_RPM=false
+DO_ARCH=false
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+    -h | --help)
+        help_info
+        exit 0
+        ;;
+    --flatpak)
+        export MONYACODE_BUNDLE_TYPE=flatpak
+        shift
+        ;;
+    --appimage)
+        export DO_APPIMAGE=true
+        export DO_DEB=true
+        shift
+        ;;
+    --no-build)
+        DO_BUILD=false
+        BUILD_REMOTE=false
+        shift
+        ;;
+    --no-build-remote)
+        BUILD_REMOTE=false
+        shift
+        ;;
+    --tarball)
+        DO_TARBALL=true
+        shift
+        ;;
+    --deb)
+        DO_DEB=true
+        shift
+        ;;
+    --rpm)
+        DO_RPM=true
+        shift
+        ;;
+    --arch)
+        DO_ARCH=true
+        shift
+        ;;
+    --)
+        shift
+        break
+        ;;
+    -*)
+        echo "Unknown option: $1" >&2
+        help_info
+        exit 1
+        ;;
+    *)
+        echo "Error: Unexpected argument: $1" >&2
+        help_info
+        exit 1
+        ;;
+    esac
+done
+
+# Throw error if no arguments given
+if [[ "$DO_TARBALL" == "false" && "$DO_DEB" == "false" && "$DO_RPM" == "false" && "$DO_APPIMAGE" == "false" && "$DO_ARCH" == "false" ]]; then
+    echo "Error: At least one of --tarball, --deb, --appimage, --arch or --rpm must be specified." >&2
+    help_info
+    exit 1
+fi
+
+# Check if cargo-deb is installed
+if [ "${DO_DEB}" == "true" ]; then
+    cargo deb --help >/dev/null 2>&1 || (echo "cargo-deb is not installed" && exit 1)
+fi
+
+# Check if cargo-generate-rpm is installed
+if [ "${DO_RPM}" == "true" ]; then
+    cargo generate-rpm --help >/dev/null 2>&1 || (echo "cargo-generate-rpm is not installed" && exit 1)
+fi
+
+# Check if pkg2appimage (https://github.com/AppImageCommunity/pkg2appimage) is installed
+if [ "${DO_APPIMAGE}" == "true" ]; then
+    monyacode_dir=$(pwd)
+    export monyacode_dir
+    PKG2APPIMAGE_CMD="${PKG2APPIMAGE_PATH:-$(command -v pkg2appimage || true)}"
+    if [ -z "${PKG2APPIMAGE_CMD}" ]; then
+        echo "Error: pkg2appimage not found. Set PKG2APPIMAGE_PATH or install pkg2appimage from here: https://github.com/AppImageCommunity/pkg2appimage" >&2
+        exit 1
+    fi
+fi
+
+# Check if on Arch Linux
+if [ "${DO_ARCH}" == "true" ]; then
+    if ! grep -q "Arch Linux" /etc/os-release; then
+        echo "Building an Arch package will only work on Arch Linux" && exit 1
+    fi
+fi
+
+export MONYACODE_BUNDLE=true
+
+arch=$(uname -m)
+
+version_info=$(rustc --version --verbose)
+host_line=$(echo "$version_info" | grep host)
+target_triple=${host_line#*: }
+export target_triple
+
+if command -v gcc >/dev/null; then
+    # work around incompatibility with newer GCC:
+    # https://github.com/zed-industries/zed/issues/24880
+    currentversion="$(gcc -dumpversion)"
+    requiredversion="14"
+    if [ "$(printf '%s\n' "$requiredversion" "$currentversion" | sort -V | head -n1)" = "$requiredversion" ]; then
+        echo "Handle GCC version 14+ when compiling remote server..."
+        export AWS_LC_SYS_CC=clang
+        export REMOTE_SERVER_TARGET=$target_triple
+    fi
+fi
+
+channel=$(<crates/monyacode/RELEASE_CHANNEL)
+target_dir="${CARGO_TARGET_DIR:-target}"
+
+version="$(script/get-crate-version monyacode)"
+RELEASE_VERSION="${version}"
+export RELEASE_VERSION
+
+musl_triple=${target_triple/-gnu/-musl}
+remote_server_triple=${REMOTE_SERVER_TARGET:-"${musl_triple}"}
+
+if command -v rustup >/dev/null 2>&1; then
+    rustup target add "$remote_server_triple"
+fi
+
+# Generate the licenses first, so they can be baked into the binaries
+script/generate-licenses
+
+if command -v clang &>/dev/null; then
+    CC=${CC:+$(which clang)}
+    export CC
+fi
+
+if [ "$DO_BUILD" = "true" ]; then
+    RUSTFLAGS="${RUSTFLAGS:-} -C link-args=-Wl,--disable-new-dtags,-rpath,\$ORIGIN/../lib"
+    export RUSTFLAGS
+    cargo build --release --target "${target_triple}" --package monyacode --package cli
+    # Build remote_server separately to prevent feature unification from other crates
+    # from influencing dynamic libraries required by it.
+    if [[ "$remote_server_triple" == "$musl_triple" ]]; then
+        RUSTFLAGS="${RUSTFLAGS:-} -C target-feature=+crt-static"
+        if command -v mold &>/dev/null; then
+            RUSTFLAGS="${RUSTFLAGS} -C linker=clang -C link-arg=-fuse-ld=mold"
+        fi
+        export RUSTFLAGS
+    fi
+    if [ "$BUILD_REMOTE" = "true" ]; then
+        cargo build --release --target "${remote_server_triple}" --package remote_server
+    fi
+fi
+
+# Ensure that remote_server does not depend on libssl nor libcrypto
+if ldd "${target_dir}/${remote_server_triple}/release/remote_server" | grep -q 'libcrypto\|libssl'; then
+    if [[ "$remote_server_triple" == *-musl ]]; then
+        echo "Error: remote_server still depends on libssl or libcrypto" && exit 1
+    else
+        echo "Info: Using non-musl remote-server build."
+    fi
+fi
+
+export DO_STARTUP_NOTIFY="true"
+export APP_CLI="monyacode"
+export APP_ICON="app.liten.MonyaCode"
+export APP_ARGS="%U"
+if [[ "$channel" == "dev" ]]; then
+    export APP_NAME="MonyaCode Dev"
+else
+    export APP_NAME="MonyaCode"
+fi
+
+suffix=""
+if [ "$channel" != "stable" ]; then
+    suffix="-$channel"
+fi
+
+# Strip debug symbols (keeps symbol table for backtraces)
+if [ -f "${target_dir}/${target_triple}/release/monyacode" ]; then
+    objcopy --strip-debug "${target_dir}/${target_triple}/release/monyacode"
+fi
+if [ -f "${target_dir}/${target_triple}/release/cli" ]; then
+    objcopy --strip-debug "${target_dir}/${target_triple}/release/cli"
+fi
+if [ -f "${target_dir}/${remote_server_triple}/release/remote_server" ]; then
+    objcopy --strip-debug "${target_dir}/${remote_server_triple}/release/remote_server"
+fi
+
+# Bundle tarball
+if [ "$DO_TARBALL" = "true" ]; then
+    temp_dir=$(mktemp -d)
+    monyacode_dir="${temp_dir}/monyacode${suffix}.app"
+
+    mkdir -p "${monyacode_dir}/bin" "${monyacode_dir}/libexec"
+    cp "${target_dir}/${target_triple}/release/monyacode" "${monyacode_dir}/libexec/monyacode-editor"
+    cp "${target_dir}/${target_triple}/release/cli" "${monyacode_dir}/bin/monyacode"
+
+    mkdir -p "${monyacode_dir}/lib"
+    ldd "${target_dir}/${target_triple}/release/monyacode" \
+        | grep '^\s*.\+ => .\+ (.\+)$' \
+        | sed -e 's,\s*.\+ => \(.\+\) (.\+),\1,g' \
+        | grep -v '\<\(libstdc++.so\|libc.so\|libgcc_s.so\|libm.so\|libpthread.so\|libdl.so\)' \
+        | xargs -I{} cp {} "${monyacode_dir}/lib/"
+
+    mkdir -p "${monyacode_dir}/share/icons/hicolor/scalable/apps"
+    mkdir -p "${monyacode_dir}/share/icons/hicolor/symbolic/apps"
+    cp "crates/monyacode/resources/app.liten.MonyaCode.svg" "${monyacode_dir}/share/icons/hicolor/scalable/apps/app.liten.MonyaCode.svg"
+    cp "crates/monyacode/resources/app.liten.MonyaCode-symbolic.svg" "${monyacode_dir}/share/icons/hicolor/symbolic/apps/app.liten.MonyaCode-symbolic.svg"
+
+    mkdir -p "${monyacode_dir}/share/applications"
+    envsubst <"crates/monyacode/resources/monyacode.desktop.in" >"${monyacode_dir}/share/applications/monyacode${suffix}.desktop"
+    chmod +x "${monyacode_dir}/share/applications/monyacode${suffix}.desktop"
+
+    cp "assets/licenses.md" "${monyacode_dir}/licenses.md"
+
+    archive="monyacode-linux-${arch}.tar.gz"
+    rm -f "${target_dir}"/release/monyacode?(+([-[:alnum:]]))-linux-"$(uname -m)".tar.gz
+    tar -czvf "${target_dir}/release/${archive}" -C "${temp_dir}" "monyacode${suffix}.app"
+
+    if [ "$BUILD_REMOTE" = "true" ]; then
+        gzip -f --stdout --best "${target_dir}/${remote_server_triple}/release/remote_server" \
+            >"${target_dir}/monyacode-remote-server-linux-${arch}.gz"
+    fi
+fi
+
+# Bundle .deb package
+if [ "$DO_DEB" = "true" ]; then
+    envsubst <"crates/monyacode/resources/monyacode.desktop.in" >"crates/monyacode/resources/monyacode.desktop"
+    CARGO_TARGET_DIR="${target_dir}/${target_triple}" cargo deb -p monyacode --no-build --compress-type xz
+
+    # Bundle AppImage from .deb package
+    if [ "$DO_APPIMAGE" = "true" ]; then
+        envsubst <"crates/monyacode/resources/appimage/recipe.yaml.in" >"/tmp/recipe.yaml"
+        $PKG2APPIMAGE_CMD "/tmp/recipe.yaml"
+        mkdir -p "target/${target_triple}/AppImage"
+        mv out/MonyaCode*.AppImage -t "target/${target_triple}/AppImage/"
+        rm -r out monyacode .AppDir
+    fi
+fi
+
+# Bundle .rpm package
+if [ "$DO_RPM" = "true" ]; then
+    envsubst <"crates/monyacode/resources/monyacode.desktop.in" >"crates/monyacode/resources/monyacode.desktop"
+    cargo generate-rpm -p crates/monyacode --target-dir "${target_dir}/${target_triple}" --payload-compress "${MONYACODE_RPM_COMPRESSION:=zstd}"
+fi
+
+# Bundle Arch package
+if [ "$DO_ARCH" = "true" ]; then
+    envsubst "$RELEASE_VERSION" <"crates/monyacode/resources/arch/PKGBUILD.in" >"crates/monyacode/resources/arch/PKGBUILD"
+    updpkgsums crates/monyacode/resources/arch/PKGBUILD
+    makepkg -sc -D crates/monyacode/resources/arch
+    mkdir -p "${target_dir}/${target_triple}"/arch
+    cp crates/monyacode/resources/arch/monyacode-bin*pkg.tar.zst "${target_dir}/${target_triple}"/arch
+fi

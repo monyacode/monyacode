@@ -1,0 +1,35 @@
+[package]
+name = "docs"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+doctest = false
+path = "src/docs.rs"
+
+[dependencies]
+anyhow.workspace = true
+app_actions.workspace = true
+assets.workspace = true
+editor.workspace = true
+gpui.workspace = true
+language.workspace = true
+markdown_preview.workspace = true
+regex.workspace = true
+settings.workspace = true
+theme.workspace = true
+ui.workspace = true
+workspace.workspace = true
+
+[dev-dependencies]
+editor = { workspace = true, features = ["test-support"] }
+gpui = { workspace = true, features = ["test-support"] }
+language = { workspace = true, features = ["test-support"] }
+theme = { workspace = true, features = ["test-support"] }
+workspace = { workspace = true, features = ["test-support"] }
+
+[lints]
+workspace = true

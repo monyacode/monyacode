@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+RELEASE_CRATES=("cli" "remote_server" "monyacode")
+
+check_license () {
+    local dir="$1"
+    local allowed_licenses=("LICENSE-GPL" "LICENSE-APACHE")
+
+    for license in "${allowed_licenses[@]}"; do
+        if [[ -L "$dir/$license" ]]; then
+            return 0
+        elif [[ -e "$dir/$license" ]]; then
+            echo "Error: $dir/$license exists but is not a symlink."
+            exit 1
+        fi
+    done
+
+    echo "Error: $dir does not contain a LICENSE-GPL or LICENSE-APACHE symlink"
+    exit 1
+}
+
+git ls-files "**/*/Cargo.toml" | while read -r cargo_toml; do
+   check_license "$(dirname "$cargo_toml")"
+done
+
+echo "check-licenses succeeded"

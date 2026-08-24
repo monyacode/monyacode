@@ -1,0 +1,41 @@
+[package]
+name = "lsp"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+doctest = false
+path = "src/lsp.rs"
+
+[dependencies]
+anyhow.workspace = true
+async-pipe = { workspace = true, optional = true }
+collections.workspace = true
+futures.workspace = true
+gpui.workspace = true
+log.workspace = true
+lsp-types.workspace = true
+parking_lot.workspace = true
+postage.workspace = true
+release_channel.workspace = true
+schemars.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+smol.workspace = true
+util.workspace = true
+
+[dev-dependencies]
+async-pipe.workspace = true
+ctor.workspace = true
+gpui = { workspace = true, features = ["test-support"] }
+util = { workspace = true, features = ["test-support"] }
+zlog.workspace = true
+
+[features]
+test-support = ["async-pipe"]
+
+[lints]
+workspace = true

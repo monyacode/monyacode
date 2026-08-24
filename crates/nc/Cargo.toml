@@ -1,0 +1,20 @@
+[package]
+name = "nc"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+doctest = false
+path = "src/nc.rs"
+
+[dependencies]
+anyhow.workspace = true
+futures.workspace = true
+net.workspace = true
+smol.workspace = true
+
+[lints]
+workspace = true

@@ -1,0 +1,32 @@
+[package]
+name = "perf"
+version = "0.1.0"
+edition.workspace = true
+description = "A tool for measuring MonyaCode test performance, with too many Clippy lints"
+license = "Apache-2.0"
+publish = false
+
+[lib]
+
+[dependencies]
+collections.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+
+[lints.clippy]
+all = "warn"
+allow_attributes = "deny"
+allow_attributes_without_reason = "deny"  # This covers `expect` also, since we deny `allow`
+as_underscore = "deny"
+disallowed_methods = { level = "allow", priority = 1 }
+let_underscore_must_use = "forbid"
+missing_docs_in_private_items = "warn"
+missing_safety_doc = "forbid"
+needless_continue = "allow"  # For a convenience macro
+pedantic = "warn"
+style = "warn"
+undocumented_unsafe_blocks = "forbid"
+
+# Some personal lint preferences :3
+[lints.rust]
+missing_docs = "warn"

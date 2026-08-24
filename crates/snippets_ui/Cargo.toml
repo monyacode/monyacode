@@ -1,0 +1,26 @@
+[package]
+name = "snippets_ui"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+path = "src/snippets_ui.rs"
+
+[dependencies]
+file_finder.workspace = true
+file_icons.workspace = true
+fuzzy.workspace = true
+gpui.workspace = true
+language.workspace = true
+paths.workspace = true
+picker.workspace = true
+settings.workspace = true
+ui.workspace = true
+util.workspace = true
+workspace.workspace = true
+
+[lints]
+workspace = true

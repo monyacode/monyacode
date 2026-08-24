@@ -1,0 +1,18 @@
+[package]
+name = "story"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+path = "src/story.rs"
+
+[dependencies]
+gpui.workspace = true
+itertools.workspace = true
+smallvec.workspace = true
+
+[lints]
+workspace = true

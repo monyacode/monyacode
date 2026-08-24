@@ -1,0 +1,33 @@
+[package]
+name = "rope"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+path = "src/rope.rs"
+
+[[bench]]
+harness = false
+name = "rope_benchmark"
+
+[dependencies]
+arrayvec.workspace = true
+log.workspace = true
+rayon.workspace = true
+sum_tree.workspace = true
+unicode-segmentation.workspace = true
+util.workspace = true
+
+[dev-dependencies]
+criterion.workspace = true
+ctor.workspace = true
+gpui = { workspace = true, features = ["test-support"] }
+rand.workspace = true
+util = { workspace = true, features = ["test-support"] }
+zlog.workspace = true
+
+[lints]
+workspace = true

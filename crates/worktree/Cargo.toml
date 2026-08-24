@@ -1,0 +1,56 @@
+[package]
+name = "worktree"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+doctest = false
+path = "src/worktree.rs"
+
+[dependencies]
+anyhow.workspace = true
+async-lock.workspace = true
+chardetng.workspace = true
+clock.workspace = true
+collections.workspace = true
+encoding_rs.workspace = true
+fs.workspace = true
+futures.workspace = true
+fuzzy.workspace = true
+git.workspace = true
+gpui.workspace = true
+ignore.workspace = true
+language.workspace = true
+log.workspace = true
+parking_lot.workspace = true
+paths.workspace = true
+postage.workspace = true
+rpc = { workspace = true, features = ["gpui"] }
+serde_json.workspace = true
+settings.workspace = true
+smallvec.workspace = true
+smol.workspace = true
+sum_tree.workspace = true
+text.workspace = true
+util.workspace = true
+
+[dev-dependencies]
+clock = { workspace = true, features = ["test-support"] }
+collections = { workspace = true, features = ["test-support"] }
+gpui = { workspace = true, features = ["test-support"] }
+paths = { workspace = true, features = ["test-support"] }
+pretty_assertions.workspace = true
+rand.workspace = true
+rpc = { workspace = true, features = ["test-support"] }
+settings = { workspace = true, features = ["test-support"] }
+util = { workspace = true, features = ["test-support"] }
+zlog.workspace = true
+
+[features]
+test-support = ["gpui/test-support", "language/test-support", "settings/test-support", "text/test-support", "util/test-support"]
+
+[lints]
+workspace = true

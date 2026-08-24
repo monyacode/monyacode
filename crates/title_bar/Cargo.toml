@@ -1,0 +1,50 @@
+[package]
+name = "title_bar"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+doctest = false
+path = "src/title_bar.rs"
+
+[dependencies]
+app_actions.workspace = true
+gpui = { workspace = true, features = [] }
+log.workspace = true
+project.workspace = true
+remote.workspace = true
+schemars.workspace = true
+serde.workspace = true
+settings.workspace = true
+smallvec.workspace = true
+story = { workspace = true, optional = true }
+theme.workspace = true
+ui.workspace = true
+util.workspace = true
+workspace.workspace = true
+
+[dev-dependencies]
+gpui = { workspace = true, features = ["test-support"] }
+project = { workspace = true, features = ["test-support"] }
+settings = { workspace = true, features = ["test-support"] }
+util = { workspace = true, features = ["test-support"] }
+workspace = { workspace = true, features = ["test-support"] }
+
+[target.'cfg(windows)'.dependencies]
+windows.workspace = true
+
+[features]
+default = []
+stories = ["dep:story"]
+test-support = [
+  "gpui/test-support",
+  "project/test-support",
+  "util/test-support",
+  "workspace/test-support",
+]
+
+[lints]
+workspace = true

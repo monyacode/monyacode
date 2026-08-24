@@ -1,0 +1,22 @@
+[package]
+name = "explorer_command_injector"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+crate-type = ["cdylib"]
+doctest = false
+path = "src/explorer_command_injector.rs"
+
+[dependencies]
+
+[target.'cfg(target_os = "windows")'.dependencies]
+windows.workspace = true
+windows-core.workspace = true
+windows-registry.workspace = true
+
+[lints]
+workspace = true

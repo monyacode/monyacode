@@ -1,0 +1,22 @@
+[package]
+name = "fuzzy"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+doctest = false
+path = "src/fuzzy.rs"
+
+[dependencies]
+gpui.workspace = true
+log.workspace = true
+util.workspace = true
+
+[dev-dependencies]
+util = { workspace = true, features = ["test-support"] }
+
+[lints]
+workspace = true

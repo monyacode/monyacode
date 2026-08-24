@@ -1,0 +1,39 @@
+[package]
+name = "task"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+doctest = false
+path = "src/task.rs"
+
+[dependencies]
+anyhow.workspace = true
+app_actions.workspace = true
+collections.workspace = true
+futures.workspace = true
+gpui.workspace = true
+hex.workspace = true
+log.workspace = true
+parking_lot.workspace = true
+proto.workspace = true
+schemars.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+serde_json_lenient.workspace = true
+sha2.workspace = true
+shellexpand.workspace = true
+util.workspace = true
+
+[dev-dependencies]
+gpui = { workspace = true, features = ["test-support"] }
+pretty_assertions.workspace = true
+
+[features]
+test-support = ["gpui/test-support", "util/test-support"]
+
+[lints]
+workspace = true

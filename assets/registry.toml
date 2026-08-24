@@ -1,0 +1,259 @@
+[extensions]
+[extensions.astro]
+name = "astro"
+ids = ["astro"]
+repository = "https://github.com/zed-extensions/astro"
+
+[extensions.beancount]
+name = "beancount"
+ids = ["beancount"]
+repository = "https://github.com/zed-extensions/beancount"
+
+[extensions.clojure]
+name = "clojure"
+ids = ["bb", "clj", "cljc", "cljs", "edn"]
+repository = "https://github.com/zed-extensions/clojure"
+
+[extensions.neocmake]
+name = "neocmake"
+ids = ["CMakeLists.txt", "cmake"]
+repository = "https://github.com/k0tran/zed_neocmake"
+
+[extensions.csharp]
+name = "csharp"
+ids = ["cs"]
+repository = "https://github.com/zed-extensions/csharp"
+
+[extensions.cython]
+name = "cython"
+ids = ["pyx", "pxd", "pxi"]
+repository = "https://github.com/lgeiger/zed-cython"
+
+[extensions.dart]
+name = "dart"
+ids = ["dart"]
+repository = "https://github.com/zed-extensions/dart"
+
+[extensions.dockerfile]
+name = "dockerfile"
+ids = ["Dockerfile"]
+repository = "https://github.com/zed-extensions/dockerfile"
+
+[extensions.elisp]
+name = "elisp"
+ids = ["el"]
+repository = "https://github.com/JosephTLyons/zed-elisp"
+
+[extensions.elixir]
+name = "elixir"
+ids = ["ex", "exs", "heex"]
+repository = "https://github.com/zed-extensions/elixir"
+extras = ["https://github.com/FeedMyCat54/elixir-zed-snippets"]
+
+[extensions.elm]
+name = "elm"
+ids = ["elm"]
+repository = "https://github.com/zed-extensions/elm"
+
+[extensions.erlang]
+name = "erlang"
+ids = ["erl", "hrl"]
+repository = "https://github.com/zed-extensions/erlang"
+
+[extensions.fish]
+name = "fish"
+ids = ["fish"]
+repository = "https://github.com/hasit/zed-fish"
+
+[extensions.git-firefly]
+name = "git-firefly"
+ids = [".gitconfig", ".gitignore", "COMMIT_EDITMSG", "EDIT_DESCRIPTION", "MERGE_MSG", "NOTES_EDITMSG", "TAG_EDITMSG", "git-rebase-todo"]
+repository = "https://github.com/zed-extensions/git_firefly"
+
+[extensions.gleam]
+name = "gleam"
+ids = ["gleam"]
+repository = "https://github.com/gleam-lang/zed-gleam"
+
+[extensions.glsl]
+name = "glsl"
+ids = ["vert", "frag"]
+repository = "https://codeberg.org/GramEditor/glsl-extension"
+
+[extensions.graphql]
+name = "graphql"
+ids = ["gql", "graphql"]
+repository = "https://github.com/11bit/zed-extension-graphql"
+
+[extensions.haskell]
+name = "haskell"
+ids = ["hs"]
+repository = "https://github.com/zed-extensions/haskell"
+
+[extensions.html]
+name = "html"
+ids = ["htm", "html", "shtml"]
+repository = ""
+extras = ["https://github.com/zed-extensions/superhtml", "https://github.com/seekode/zed-html-snippets"]
+
+[extensions.java]
+name = "java"
+ids = ["java"]
+repository = "https://github.com/zed-extensions/java"
+
+[extensions.kotlin]
+name = "kotlin"
+ids = ["kt"]
+repository = "https://github.com/zed-extensions/kotlin"
+
+[extensions.latex]
+name = "latex"
+ids = ["tex"]
+repository = "https://github.com/rzukic/zed-latex"
+
+[extensions.log]
+name = "log"
+ids = ["log"]
+repository = "https://github.com/zed-extensions/log"
+
+[extensions.lua]
+name = "lua"
+ids = ["lua"]
+repository = "https://github.com/zed-extensions/lua"
+
+[extensions.make]
+name = "make"
+ids = ["Makefile"]
+repository = "https://github.com/caius/zed-make"
+
+[extensions.nim]
+name = "nim"
+ids = ["nim"]
+repository = "https://github.com/foxoman/zed-nim"
+
+[extensions.nix]
+name = "nix"
+ids = ["nix"]
+repository = "https://github.com/zed-extensions/nix"
+
+[extensions.nu]
+name = "nu"
+ids = ["nu"]
+repository = "https://github.com/zed-extensions/nu"
+
+[extensions.ocaml]
+name = "ocaml"
+ids = ["ml", "mli"]
+repository = "https://github.com/zed-extensions/ocaml"
+
+[extensions.php]
+name = "php"
+ids = ["php"]
+repository = "https://github.com/zed-extensions/php"
+extras = ["https://github.com/seekode/zed-php-snippets"]
+
+[extensions.powershell]
+name = "powershell"
+ids = ["ps1", "psm1"]
+repository = "https://github.com/wingyplus/zed-powershell"
+
+[extensions.prisma]
+name = "prisma"
+ids = ["prisma"]
+repository = "https://github.com/zed-extensions/prisma"
+
+[extensions.proto]
+name = "proto"
+ids = ["proto"]
+repository = "https://codeberg.org/GramEditor/proto-extension"
+
+[extensions.purescript]
+name = "purescript"
+ids = ["purs"]
+repository = "https://github.com/zed-extensions/purescript"
+
+[extensions.r]
+name = "r"
+ids = ["r", "R"]
+repository = "https://github.com/ocsmit/zed-r"
+
+[extensions.racket]
+name = "racket"
+ids = ["rkt"]
+repository = "https://github.com/zed-extensions/racket"
+
+[extensions.rescript]
+name = "rescript"
+ids = ["res", "resi"]
+repository = "https://github.com/humaans/rescript-zed"
+
+[extensions.ruby]
+name = "ruby"
+ids = ["rb", "erb"]
+repository = "https://github.com/zed-extensions/ruby"
+
+[extensions.scheme]
+name = "scheme"
+ids = ["scm"]
+repository = "https://github.com/zed-extensions/scheme"
+
+[extensions.scss]
+name = "scss"
+ids = ["scss"]
+repository = "https://github.com/bajrangCoder/zed-scss"
+
+[extensions.sql]
+name = "sql"
+ids = ["sql"]
+repository = "https://github.com/zed-extensions/sql"
+
+[extensions.svelte]
+name = "svelte"
+ids = ["svelte"]
+repository = "https://github.com/zed-extensions/svelte"
+extras = ["https://github.com/bobbymannino/svelte-snippets-for-zed"]
+
+[extensions.swift]
+name = "swift"
+ids = ["swift"]
+repository = "https://github.com/zed-extensions/swift"
+
+[extensions.templ]
+name = "templ"
+ids = ["templ"]
+repository = "https://github.com/makifdb/zed-templ"
+
+[extensions.terraform]
+name = "terraform"
+ids = ["tf", "tfvars", "hcl"]
+repository = "https://github.com/zed-extensions/terraform"
+
+[extensions.toml]
+name = "toml"
+ids = ["Cargo.lock", "toml"]
+repository = "https://github.com/zed-extensions/toml"
+
+[extensions.typst]
+name = "typst"
+ids = ["typ"]
+repository = "https://github.com/weethet/typst.zed"
+
+[extensions.vue]
+name = "vue"
+ids = ["vue"]
+repository = "https://github.com/zed-extensions/vue"
+
+[extensions.wgsl]
+name = "wgsl"
+ids = ["wgsl"]
+repository = "https://github.com/luan/zed-wgsl"
+
+[extensions.xml]
+name = "xml"
+ids = ["xml"]
+repository = "https://github.com/sweetppro/zed-xml"
+
+[extensions.zig]
+name = "zig"
+ids = ["zig"]
+repository = "https://github.com/zed-extensions/zig"

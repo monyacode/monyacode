@@ -1,0 +1,209 @@
+[package]
+name = "monyacode"
+version.workspace = true
+edition.workspace = true
+description = "What cannot be mended must be transcended."
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[package.metadata.bundle-dev]
+icon = ["resources/app-icon-dev@2x.png", "resources/app-icon-dev.png"]
+identifier = "app.liten.MonyaCode-Dev"
+name = "MonyaCode Dev"
+osx_minimum_system_version = "10.15.7"
+osx_info_plist_exts = ["resources/info/*"]
+osx_url_schemes = ["monyacode"]
+
+[package.metadata.bundle-stable]
+icon = ["resources/app-icon@2x.png", "resources/app-icon.png"]
+identifier = "app.liten.MonyaCode"
+name = "MonyaCode"
+osx_minimum_system_version = "10.15.7"
+osx_info_plist_exts = ["resources/info/*"]
+osx_url_schemes = ["monyacode"]
+
+[package.metadata.deb]
+name = "monyacode"
+maintainer = "Kristoffer Grönlund <k@ziran.se>"
+copyright = "2026, Kristoffer Grönlund"
+license-file = ["../../LICENSE-GPL", "0"]
+depends = "$auto"
+section = "editors"
+priority = "optional"
+
+extended-description = """\
+A code editor for humanoid apes and grumpy toads. \
+MonyaCode is a fork of the Zed editor."""
+assets = [
+  ["target/release/monyacode", "usr/libexec/monyacode-editor", "755"],
+  ["target/release/cli", "usr/bin/monyacode", "755"],
+  ["resources/monyacode.desktop", "usr/share/applications/app.liten.MonyaCode.desktop", "644"],
+  ["resources/app.liten.MonyaCode.svg", "usr/share/icons/hicolor/scalable/apps/app.liten.MonyaCode.svg", "644"],
+  ["resources/app.liten.MonyaCode-symbolic.svg", "usr/share/icons/hicolor/symbolic/apps/app.liten.MonyaCode-symbolic.svg", "644"],
+  ["../../assets/licenses.md", "usr/share/doc/monyacode/licenses.md", "644"]
+]
+
+[package.metadata.generate-rpm]
+name = "monyacode"
+summary = "A code editor for humanoid apes and grumpy toads"
+url = "https://monyacode-editor.com"
+assets = [
+  { source = "target/release/monyacode", dest = "/usr/libexec/monyacode-editor", mode = "755" },
+  { source = "target/release/cli", dest = "/usr/bin/monyacode", mode = "755" },
+  { source = "resources/monyacode.desktop", dest = "/usr/share/applications/app.liten.MonyaCode.desktop", mode = "644" },
+  { source = "resources/app.liten.MonyaCode.svg", dest = "/usr/share/icons/hicolor/scalable/apps/app.liten.MonyaCode.svg", mode = "644" },
+  { source = "resources/app.liten.MonyaCode-symbolic.svg", dest = "/usr/share/icons/hicolor/symbolic/apps/app.liten.MonyaCode-symbolic.svg", mode = "644" },
+  { source = "assets/licenses.md", dest = "/usr/share/doc/monyacode/licenses.md", mode = "644", doc = true }
+]
+
+[lib]
+name = "monyacode"
+path = "src/main.rs"
+
+[[bin]]
+name = "monyacode"
+path = "src/monyacode-main.rs"
+
+[dependencies]
+activity_indicator.workspace = true
+anyhow.workspace = true
+askpass.workspace = true
+assets.workspace = true
+bitcode.workspace = true
+breadcrumbs.workspace = true
+clap.workspace = true
+cli.workspace = true
+client.workspace = true
+collections.workspace = true
+command_palette.workspace = true
+component.workspace = true
+crashes.workspace = true
+dap_adapters.workspace = true
+db.workspace = true
+debug_adapter_extension.workspace = true
+debugger_tools.workspace = true
+debugger_ui.workspace = true
+diagnostics.workspace = true
+docs.workspace = true
+editor.workspace = true
+encoding_selector.workspace = true
+env_logger.workspace = true
+extension.workspace = true
+extension_host.workspace = true
+extensions_ui.workspace = true
+file_finder.workspace = true
+fs.workspace = true
+futures.workspace = true
+git.workspace = true
+git_graph.workspace = true
+git_hosting_providers.workspace = true
+git_ui.workspace = true
+go_to_line.workspace = true
+gpui = { workspace = true, features = ["cosmic-text", "wayland", "windows-manifest", "x11"] }
+gpui_tokio.workspace = true
+rayon.workspace = true
+system_specs.workspace = true
+
+app_actions.workspace = true
+chrono.workspace = true
+image_viewer.workspace = true
+inspector_ui.workspace = true
+install_cli.workspace = true
+journal.workspace = true
+json_schema_store.workspace = true
+keymap_editor.workspace = true
+language.workspace = true
+language_extension.workspace = true
+language_selector.workspace = true
+language_tools.workspace = true
+languages = { workspace = true, features = ["load-grammars"] }
+line_ending_selector.workspace = true
+log.workspace = true
+markdown.workspace = true
+markdown_preview.workspace = true
+menu.workspace = true
+migrator.workspace = true
+mimalloc = { workspace = true, optional = true }
+miniprofiler_ui.workspace = true
+nc.workspace = true
+node_runtime.workspace = true
+notifications.workspace = true
+onboarding.workspace = true
+outline.workspace = true
+outline_panel.workspace = true
+parking_lot.workspace = true
+paths.workspace = true
+picker.workspace = true
+project.workspace = true
+project_panel.workspace = true
+project_symbols.workspace = true
+recent_files.workspace = true
+recent_projects.workspace = true
+regex.workspace = true
+release_channel.workspace = true
+remote.workspace = true
+repl.workspace = true
+reqwest_client.workspace = true
+rope.workspace = true
+search.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+session.workspace = true
+settings.workspace = true
+settings_profile_selector.workspace = true
+settings_ui.workspace = true
+shellexpand.workspace = true
+smol.workspace = true
+snippet_provider.workspace = true
+snippets_ui.workspace = true
+svg_preview.workspace = true
+sysinfo.workspace = true
+tab_switcher.workspace = true
+tasks_ui.workspace = true
+terminal_view.workspace = true
+theme.workspace = true
+theme_extension.workspace = true
+theme_selector.workspace = true
+title_bar.workspace = true
+toolchain_selector.workspace = true
+ui.workspace = true
+ui_input.workspace = true
+ui_prompt.workspace = true
+url.workspace = true
+urlencoding.workspace = true
+util.workspace = true
+uuid.workspace = true
+vim.workspace = true
+vim_mode_setting.workspace = true
+watch.workspace = true
+which_key.workspace = true
+workspace.workspace = true
+zlog.workspace = true
+zlog_settings.workspace = true
+
+[dev-dependencies]
+editor = { workspace = true, features = ["test-support"] }
+gpui = { workspace = true, features = ["test-support"] }
+image_viewer = { workspace = true, features = ["test-support"] }
+itertools.workspace = true
+language = { workspace = true, features = ["test-support"] }
+pretty_assertions.workspace = true
+project = { workspace = true, features = ["test-support"] }
+terminal_view = { workspace = true, features = ["test-support"] }
+tree-sitter-md.workspace = true
+tree-sitter-rust.workspace = true
+workspace = { workspace = true, features = ["test-support"] }
+
+[target.'cfg(any(target_os = "linux", target_os = "freebsd"))'.dependencies]
+ashpd.workspace = true
+
+[target.'cfg(target_os = "windows")'.dependencies]
+chrono.workspace = true
+windows.workspace = true
+
+[target.'cfg(target_os = "windows")'.build-dependencies]
+winresource.workspace = true
+
+[lints]
+workspace = true

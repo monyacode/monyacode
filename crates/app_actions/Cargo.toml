@@ -1,0 +1,15 @@
+[package]
+name = "app_actions"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[dependencies]
+gpui.workspace = true
+schemars.workspace = true
+serde.workspace = true
+
+[lints]
+workspace = true

@@ -1,0 +1,48 @@
+[package]
+name = "remote"
+version.workspace = true
+edition.workspace = true
+description = "Client-side subsystem for remote editing"
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+doctest = false
+path = "src/remote.rs"
+
+[dependencies]
+anyhow.workspace = true
+askpass.workspace = true
+async-trait.workspace = true
+collections.workspace = true
+fs.workspace = true
+futures.workspace = true
+gpui.workspace = true
+log.workspace = true
+parking_lot.workspace = true
+paths.workspace = true
+prost.workspace = true
+release_channel.workspace = true
+rpc = { workspace = true, features = ["gpui"] }
+schemars.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+settings.workspace = true
+smol.workspace = true
+tempfile.workspace = true
+thiserror.workspace = true
+urlencoding.workspace = true
+util.workspace = true
+which.workspace = true
+
+[dev-dependencies]
+fs = { workspace = true, features = ["test-support"] }
+gpui = { workspace = true, features = ["test-support"] }
+
+[features]
+default = []
+test-support = ["fs/test-support"]
+
+[lints]
+workspace = true

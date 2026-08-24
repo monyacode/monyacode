@@ -1,0 +1,27 @@
+[package]
+name = "journal"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+doctest = false
+path = "src/journal.rs"
+
+[dependencies]
+anyhow.workspace = true
+chrono.workspace = true
+editor.workspace = true
+gpui.workspace = true
+log.workspace = true
+settings.workspace = true
+shellexpand.workspace = true
+workspace.workspace = true
+
+[dev-dependencies]
+editor = { workspace = true, features = ["test-support"] }
+
+[lints]
+workspace = true

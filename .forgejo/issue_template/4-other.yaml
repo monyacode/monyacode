@@ -1,0 +1,36 @@
+# yaml-language-server: $schema=https://www.schemastore.org/gitea-issue-forms.json
+name: "4: Other"
+about: "Other questions or something unrelated."
+title: "other: "
+labels: ["other"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **NOTE: This issue tracker is mainly for tracking and dealing with bugs. There is no big team working on MonyaCode so don't be surprised if issues and feature requests end up sitting around without much movement.**
+  - type: markdown
+    attributes:
+      value: |
+        - Please speak English, as this is the language all maintainers can speak and write.
+        - Be civil, and follow the [MonyaCode Code of Conduct](https://github.com/monyacode/monyacode/src/branch/main/CODE_OF_CONDUCT.md).
+        - Take a moment to [check that your issue hasn't been reported before](https://github.com/monyacode/monyacode/issues).
+  - type: markdown
+    attributes:
+      value: |
+        ### New workflow
+
+        We are currently experimenting with a new workflow to manage issues and better understand your problems and needs.
+
+        We are looking forward to your feedback!
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: |
+        Please provide a description of your issue/question here.
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        Thank you.

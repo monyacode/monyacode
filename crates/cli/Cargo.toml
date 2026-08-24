@@ -1,0 +1,52 @@
+[package]
+name = "cli"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+doctest = false
+path = "src/cli.rs"
+
+[[bin]]
+name = "cli"
+path = "src/main.rs"
+
+[dependencies]
+anyhow.workspace = true
+askpass.workspace = true
+clap.workspace = true
+collections.workspace = true
+ipc-channel.workspace = true
+parking_lot.workspace = true
+paths.workspace = true
+rayon.workspace = true
+release_channel.workspace = true
+serde.workspace = true
+tempfile.workspace = true
+util.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true
+util = { workspace = true, features = ["test-support"] }
+
+[target.'cfg(any(target_os = "linux", target_os = "freebsd"))'.dependencies]
+exec.workspace = true
+fork.workspace = true
+
+[target.'cfg(target_os = "macos")'.dependencies]
+objc2-core-foundation.workspace = true
+objc2-core-services.workspace = true
+plist.workspace = true
+
+[target.'cfg(target_os = "windows")'.dependencies]
+windows.workspace = true
+
+[features]
+default = []
+no-bundled-uninstall = []
+
+[lints]
+workspace = true

@@ -1,0 +1,36 @@
+[attr]crlf eol=crlf
+[attr]rust text eol=lf whitespace=tab-in-indent,trailing-space,tabwidth=4
+
+* text=auto eol=lf
+
+*.png binary
+*.ico binary
+
+*.bat crlf
+*.ps1 crlf
+
+*.rs             rust diff=rust
+
+# SHELL -> Shell, json -> JSON
+*.entitlements    linguist-language=XML
+*.in              linguist-language=Shell
+*.isl             linguist-vendored
+*.json            linguist-detectable
+*.jsonc           linguist-language=JSON
+*.plist           linguist-language=XML
+*.prettierignore  linguist-language=Shell
+*.prettierrc      linguist-language=JSON
+*.toml            linguist-detectable
+*.wit             linguist-language=WebAssembly
+*.xml             linguist-detectable
+*.yaml            linguist-detectable
+*.yml             linguist-language=YAML
+.git*             linguist-language=Shell
+.mailmap          linguist-language=Shell
+Cargo.lock        linguist-language=TOML linguist-generated
+/docs/**          linguist-documentation
+/script/**        linguist-language=Shell
+/script/**/*.hbs  linguist-language=Handlebars
+/script/**/*.ps1  linguist-language=PowerShell
+/script/**/*.py   linguist-language=Python
+/script/**/*.toml linguist-language=TOML

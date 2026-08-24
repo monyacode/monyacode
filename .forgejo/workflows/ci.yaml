@@ -1,0 +1,166 @@
+# yaml-language-server: $schema=https://www.schemastore.org/github-workflow.json
+name: CI
+
+on:
+  workflow_dispatch:
+    inputs:
+      skip_rust_build:
+        type: boolean
+        default: false
+  push:
+    branches:
+      - main
+      - test/*
+      - test-fj/*
+      - test-release/*
+      - test-release-fj/*
+    tags:
+      - "*"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: "1"
+  CARGO_INCREMENTAL: "0"
+  RUSTUP_MAX_RETRIES: "10"
+  CARGO_NET_RETRY: "10"
+
+jobs:
+  build:
+    name: Build
+    if: github.ref_type == 'branch' && !startsWith(github.ref, 'refs/heads/test-release') && !inputs.skip_rust_build
+    runs-on: rust-22.04-amd64
+    env:
+      CC: clang
+      CXX: clang++
+      CC_x86_64_unknown_linux_musl: musl-gcc
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Cache build
+        uses: actions/cache@3edfce9056124e459a23f683a21433670d47daca # v6.1.0
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-monyacode-dev-cargo-${{ hashFiles('**/Cargo.lock') }}
+          lookup-only: true
+
+      - name: Install dependencies
+        run: ./script/prepare-ci ci
+
+      - name: Cargo nextest
+        run: cargo nextest run --workspace --no-fail-fast --success-output never --show-progress none
+
+  release:
+    name: Release
+    if: github.ref_type == 'tag' || startsWith(github.ref, 'refs/heads/test-release') || inputs.skip_rust_build
+    runs-on: rust-22.04-amd64
+    environment: release
+    env:
+      CC: clang
+      CXX: clang++
+      CC_x86_64_unknown_linux_musl: musl-gcc
+      MONYACODE_RPM_COMPRESSION: gzip
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Cache build
+        uses: actions/cache@3edfce9056124e459a23f683a21433670d47daca # v6.1.0
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+            distdir/
+          key: ${{ runner.os }}-monyacode-release-cargo-${{ hashFiles('**/Cargo.lock') }}
+          lookup-only: true
+
+      - name: Install dependencies
+        if: github.ref_type == 'tag' || startsWith(github.ref, 'refs/heads/test-release')
+        run: ./script/prepare-ci release
+
+      - name: Bundle Linux
+        if: github.ref_type == 'tag' || startsWith(github.ref, 'refs/heads/test-release')
+        run: ./script/bundle-linux --tarball --deb --rpm
+
+      - name: Set artifact name
+        if: github.ref_type == 'tag' || startsWith(github.ref, 'refs/heads/test-release')
+        id: set_artifact_name
+        shell: bash
+        run: ./script/ci/artifact-name
+
+      - name: Prepare pycargoebuild
+        run: ./script/prepare-pycargoebuild
+
+      - name: Generate crate-dist
+        if: github.ref_type == 'tag' || startsWith(github.ref, 'refs/heads/test-release')
+        id: gen_crate_dist
+        shell: bash
+        run: ./script/ci/generate-crates
+
+      - name: Upload tarball
+        if: github.ref_type == 'tag' || startsWith(github.ref, 'refs/heads/test-release')
+        uses: forgejo/upload-artifact@cb8afe72b42edc798abfb8fcb556cf660d894245 # v5
+        with:
+          name: ${{ steps.set_artifact_name.outputs.tarball_amd64 }}
+          path: ${{ steps.set_artifact_name.outputs.tarball_amd64 }}
+          compression-level: 0
+
+      - name: Upload remote server
+        if: github.ref_type == 'tag' || startsWith(github.ref, 'refs/heads/test-release')
+        uses: forgejo/upload-artifact@cb8afe72b42edc798abfb8fcb556cf660d894245 # v5
+        with:
+          name: ${{ steps.set_artifact_name.outputs.remote_server_amd64 }}
+          path: ${{ steps.set_artifact_name.outputs.remote_server_amd64 }}
+          compression-level: 0
+
+      - name: Upload crate-dist
+        if: github.ref_type == 'tag' || startsWith(github.ref, 'refs/heads/test-release')
+        uses: forgejo/upload-artifact@cb8afe72b42edc798abfb8fcb556cf660d894245 # v5
+        with:
+          name: ${{ steps.gen_crate_dist.outputs.name }}
+          path: ${{ steps.gen_crate_dist.outputs.name }}
+          compression-level: 0
+
+      - name: Upload DEB
+        if: github.ref_type == 'tag' || startsWith(github.ref, 'refs/heads/test-release')
+        uses: forgejo/upload-artifact@cb8afe72b42edc798abfb8fcb556cf660d894245 # v5
+        with:
+          name: ${{ steps.set_artifact_name.outputs.deb_amd64 }}
+          path: ${{ steps.set_artifact_name.outputs.deb_amd64 }}
+          compression-level: 0
+
+      - name: Upload RPM
+        if: github.ref_type == 'tag' || startsWith(github.ref, 'refs/heads/test-release')
+        uses: forgejo/upload-artifact@cb8afe72b42edc798abfb8fcb556cf660d894245 # v5
+        with:
+          name: ${{ steps.set_artifact_name.outputs.rpm_amd64 }}
+          path: ${{ steps.set_artifact_name.outputs.rpm_amd64 }}
+          compression-level: 0
+
+      - name: Publish packages
+        if: github.ref_type == 'tag'
+        env:
+          DEB_FILE: ${{ steps.set_artifact_name.outputs.deb_amd64 }}
+          RPM_FILE: ${{ steps.set_artifact_name.outputs.rpm_amd64 }}
+          CRATE_FILE: ${{ steps.gen_crate_dist.outputs.name }}
+          REF_NAME: ${{ github.ref_name }}
+          TOKEN: ${{ secrets.CODEBERG_PACKAGE_TOKEN }}
+        run: ./script/ci/publish-packages

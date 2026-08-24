@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+version="-dev"
+debversion="dev"
+if [[ "$FORGEJO_REF_TYPE" == "tag" ]]; then
+  version="-$FORGEJO_REF_NAME"
+  debversion="$FORGEJO_REF_NAME"
+elif [[ "$FORGEJO_REF_TYPE" == "branch" ]]; then
+  version="-$FORGEJO_SHA"
+  debversion="$FORGEJO_SHA"
+fi
+
+find target -name '*.gz'
+rpm_name="$(find target -name '*.rpm' -print -quit)"
+deb_name="$(find target -name '*.deb' -print -quit)"
+
+if [[ -z "$rpm_name" || -z "$deb_name" ]]; then
+  echo "Error: RPM or DEB package not found" >&2
+  exit 1
+fi
+
+echo "deb: $deb_name"
+mv "target/release/monyacode-linux-x86_64.tar.gz" "./monyacode-linux-x86_64${version}.tar.gz"
+mv "target/monyacode-remote-server-linux-x86_64.gz" "./monyacode-remote-server-linux-x86_64${version}.gz"
+mv "$deb_name" "./monyacode_${debversion}-1_x86_64.deb"
+mv "$rpm_name" "./monyacode_${debversion}-1_x86_64.rpm"
+
+{
+  echo "tarball_amd64=monyacode-linux-x86_64${version}.tar.gz"
+  echo "remote_server_amd64=monyacode-remote-server-linux-x86_64${version}.gz"
+  echo "deb_amd64=monyacode_${debversion}-1_x86_64.deb"
+  echo "rpm_amd64=monyacode_${debversion}-1_x86_64.rpm"
+} >> "$FORGEJO_OUTPUT"

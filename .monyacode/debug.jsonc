@@ -1,0 +1,22 @@
+[
+  {
+    "label": "Debug MonyaCode (CodeLLDB)",
+    "adapter": "CodeLLDB",
+    "build": {
+      "label": "Build MonyaCode",
+      "command": "cargo",
+      "env": { "MONYACODE_STATELESS": "1" },
+      "args": ["build"],
+    },
+  },
+  {
+    "label": "Debug MonyaCode (GDB)",
+    "adapter": "GDB",
+    "build": {
+      "label": "Build MonyaCode",
+      "command": "cargo",
+      "env": { "MONYACODE_STATELESS": "1" },
+      "args": ["build"],
+    },
+  },
+]

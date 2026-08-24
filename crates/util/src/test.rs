@@ -1,0 +1,93 @@
+mod assertions;
+mod marked_text;
+
+use std::{
+    ffi::OsStr,
+    path::{Path, PathBuf},
+};
+use tempfile::TempDir;
+
+pub use assertions::*;
+pub use marked_text::*;
+
+pub struct TempTree {
+    _temp_dir: TempDir,
+    path: PathBuf,
+}
+
+impl TempTree {
+    pub fn new(tree: serde_json::Value) -> Self {
+        let dir = TempDir::new().unwrap();
+        let path = std::fs::canonicalize(dir.path()).unwrap();
+        write_tree(path.as_path(), tree);
+
+        Self { _temp_dir: dir, path }
+    }
+
+    pub fn path(&self) -> &Path {
+        self.path.as_path()
+    }
+}
+
+#[allow(clippy::disallowed_methods)]
+fn write_tree(path: &Path, tree: serde_json::Value) {
+    use serde_json::Value;
+    use std::fs;
+
+    if let Value::Object(map) = tree {
+        for (name, contents) in map {
+            let mut path = PathBuf::from(path);
+            path.push(name);
+            match contents {
+                Value::Object(_) => {
+                    fs::create_dir(&path).unwrap();
+
+                    if path.file_name() == Some(OsStr::new(".git")) {
+                        let output = std::process::Command::new("git")
+                            .args(["init", "-b", "main"])
+                            .current_dir(path.parent().unwrap())
+                            .env("GIT_CONFIG_GLOBAL", "")
+                            .env("GIT_CONFIG_SYSTEM", "")
+                            .env("GIT_AUTHOR_NAME", "test")
+                            .env("GIT_AUTHOR_EMAIL", "test@monyacode-editor.com")
+                            .env("GIT_COMMITTER_NAME", "test")
+                            .env("GIT_COMMITTER_EMAIL", "test@monyacode-editor.com")
+                            .output()
+                            .expect("failed to init git repo");
+                        assert!(
+                            output.status.success(),
+                            "git init failed: {}",
+                            String::from_utf8_lossy(&output.stderr)
+                        );
+                    }
+
+                    write_tree(&path, contents);
+                }
+                Value::Null => {
+                    fs::create_dir(&path).unwrap();
+                }
+                Value::String(contents) => {
+                    fs::write(&path, contents).unwrap();
+                }
+                _ => {
+                    panic!("JSON object must contain only objects, strings, or null");
+                }
+            }
+        }
+    } else {
+        panic!("You must pass a JSON object to this helper")
+    }
+}
+
+pub fn sample_text(rows: usize, cols: usize, start_char: char) -> String {
+    let mut text = String::new();
+    for row in 0..rows {
+        let c: char = (start_char as u32 + row as u32) as u8 as char;
+        let mut line = c.to_string().repeat(cols);
+        if row < rows - 1 {
+            line.push('\n');
+        }
+        text += &line;
+    }
+    text
+}

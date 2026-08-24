@@ -1,0 +1,186 @@
+# yaml-language-server: $schema=https://www.schemastore.org/github-workflow.json
+name: CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - test/*
+      - test-gh/*
+      - test-release/*
+      - test-release-gh/*
+    tags:
+      - "*"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: "1"
+  CARGO_INCREMENTAL: "0"
+
+jobs:
+  build:
+    name: Build (${{ matrix.os }})
+    if: github.ref_type == 'branch' && !startsWith(github.ref, 'refs/heads/test-release')
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Update cargo path
+        if: runner.os == 'macOS'
+        run: echo "/Users/runner/.cargo/bin" >> $GITHUB_PATH
+
+      - name: Install nextest
+        uses: taiki-e/install-action@ba47c86ac325773530516bb756137ac718732518 # v2.86.5
+        with:
+          tool: cargo-nextest
+
+      - name: Cache Rust build
+        uses: Swatinem/rust-cache@f0d9c3887740aee45f6153b24b3a6b815192ec16 # v2.9.3
+        with:
+          lookup-only: true
+
+      - name: Install dependencies
+        if: runner.os == 'Linux'
+        run: ./script/prepare-ci ci
+
+      - name: Run nextest
+        if: runner.os == 'Windows'
+        env:
+          MAKEOPTS: "-j2 -l2"
+          CARGO_BUILD_JOBS: "2"
+        run: cargo nextest run --workspace --no-fail-fast --success-output never --show-progress none
+
+      - name: Run nextest
+        if: runner.os != 'Windows'
+        run: cargo nextest run --workspace --no-fail-fast --success-output never --show-progress none
+
+  build-linux:
+    name: Build Linux (${{ matrix.arch }})
+    if: github.ref_type == 'tag' || startsWith(github.ref, 'refs/heads/test-release')
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      matrix:
+        include:
+          - arch: x86_64
+            runner: ubuntu-latest # v24.04
+            artifact_name: linux-x86_64
+          - arch: aarch64
+            runner: ubuntu-24.04-arm
+            artifact_name: linux-aarch64
+    env:
+      CC: clang
+      CXX: clang++
+      CC_x86_64_unknown_linux_musl: musl-gcc
+      CC_aarch64_unknown_linux_musl: musl-gcc
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Cache Rust build
+        uses: Swatinem/rust-cache@f0d9c3887740aee45f6153b24b3a6b815192ec16 # v2.9.3
+        with:
+          lookup-only: true
+
+      - name: Install dependencies
+        run: ./script/prepare-ci release
+
+      - name: Flatpak dependencies
+        run: ./script/flatpak/deps
+
+      - name: Flatpak bundle
+        run: ./script/flatpak/bundle-flatpak
+
+      - name: Copy artifacts
+        shell: bash
+        env:
+          ARCH: ${{ matrix.arch }}
+        run: ./script/ci/github-artifacts
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: artifacts/*
+
+  build-windows:
+    name: Build Windows
+    if: github.ref_type == 'tag' || startsWith(github.ref, 'refs/heads/test-release')
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - build: windows
+            os: windows-latest
+            target: x86_64-pc-windows-msvc
+            artifact_name: windows-x64
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Cache Rust build
+        uses: Swatinem/rust-cache@f0d9c3887740aee45f6153b24b3a6b815192ec16 # v2.9.3
+        with:
+          lookup-only: true
+
+      - name: Bundle Windows
+        shell: pwsh
+        run: script/bundle-windows.ps1 -Architecture x86_64
+
+      - name: List
+        shell: bash
+        run: ls -la target/*
+
+      - name: Upload MonyaCode
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: MonyaCode-${{ matrix.artifact_name }}-${{ matrix.target }}.exe
+          path: target/MonyaCode-x86_64.exe
+          if-no-files-found: error
+
+      - name: Upload remote server
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: monyacode-remote-server-${{ matrix.artifact_name}}-${{ matrix.target }}.zip
+          path: target/monyacode-remote-server-windows-x86_64.zip
+          if-no-files-found: warn
+
+  release:
+    name: Publish release
+    if: github.ref_type == 'tag'
+    needs: [build-linux, build-windows]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download release artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" artifacts/* --repo "$GITHUB_REPOSITORY" --verify-tag --generate-notes

@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+arch="${ARCH:?ARCH environment variable is not set}"
+version="-dev"
+if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
+  version="-$GITHUB_REF_NAME"
+else
+  version="-$GITHUB_SHA"
+fi
+
+mkdir -p artifacts
+cp "target/release/monyacode-linux-${arch}.tar.gz" "artifacts/monyacode-linux-${arch}${version}.tar.gz"
+cp "target/monyacode-remote-server-linux-${arch}.gz" "artifacts/monyacode-remote-server-linux-${arch}${version}.gz"
+cp "target/release/app.liten.MonyaCode.flatpak" "artifacts/app.liten.MonyaCode-${arch}${version}.flatpak"

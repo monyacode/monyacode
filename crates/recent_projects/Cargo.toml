@@ -1,0 +1,52 @@
+[package]
+name = "recent_projects"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+doctest = false
+path = "src/recent_projects.rs"
+
+[dependencies]
+anyhow.workspace = true
+app_actions.workspace = true
+askpass.workspace = true
+editor.workspace = true
+extension_host.workspace = true
+file_finder.workspace = true
+futures.workspace = true
+fuzzy.workspace = true
+gpui.workspace = true
+indoc.workspace = true
+language.workspace = true
+log.workspace = true
+markdown.workspace = true
+menu.workspace = true
+ordered-float.workspace = true
+paths.workspace = true
+picker.workspace = true
+project.workspace = true
+remote.workspace = true
+settings.workspace = true
+smol.workspace = true
+theme.workspace = true
+ui.workspace = true
+util.workspace = true
+workspace.workspace = true
+
+[dev-dependencies]
+editor = { workspace = true, features = ["test-support"] }
+language = { workspace = true, features = ["test-support"] }
+project = { workspace = true, features = ["test-support"] }
+serde_json.workspace = true
+settings = { workspace = true, features = ["test-support"] }
+workspace = { workspace = true, features = ["test-support"] }
+
+[target.'cfg(target_os = "windows")'.dependencies]
+windows-registry = "0.6.0"
+
+[lints]
+workspace = true

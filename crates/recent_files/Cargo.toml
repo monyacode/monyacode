@@ -1,0 +1,25 @@
+[package]
+name = "recent_files"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+doctest = false
+path = "src/recent_files.rs"
+
+[dependencies]
+file_icons.workspace = true
+fuzzy.workspace = true
+gpui.workspace = true
+menu.workspace = true
+picker.workspace = true
+postage.workspace = true
+ui.workspace = true
+util.workspace = true
+workspace.workspace = true
+
+[lints]
+workspace = true

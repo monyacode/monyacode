@@ -1,0 +1,24 @@
+[package]
+name = "settings_macros"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+path = "src/settings_macros.rs"
+proc-macro = true
+
+[dependencies]
+quote.workspace = true
+syn.workspace = true
+
+[dev-dependencies]
+settings.workspace = true
+
+[features]
+default = []
+
+[lints]
+workspace = true

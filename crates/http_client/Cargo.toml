@@ -1,0 +1,37 @@
+[package]
+name = "http_client"
+version.workspace = true
+edition.workspace = true
+description = "A HTTP client library for MonyaCode and GPUI"
+repository.workspace = true
+license = "Apache-2.0"
+publish = false
+
+[lib]
+doctest = true
+path = "src/http_client.rs"
+
+[dependencies]
+anyhow.workspace = true
+async-compression.workspace = true
+async-fs.workspace = true
+async-tar.workspace = true
+bytes.workspace = true
+derive_more.workspace = true
+futures.workspace = true
+http.workspace = true
+http-body.workspace = true
+log.workspace = true
+parking_lot.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+tempfile.workspace = true
+url.workspace = true
+util.workspace = true
+
+[features]
+test-support = []
+
+[lints]
+workspace = true

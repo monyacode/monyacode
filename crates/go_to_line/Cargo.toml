@@ -1,0 +1,37 @@
+[package]
+name = "go_to_line"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+doctest = false
+path = "src/go_to_line.rs"
+
+[dependencies]
+editor.workspace = true
+gpui.workspace = true
+language.workspace = true
+menu.workspace = true
+settings.workspace = true
+text.workspace = true
+theme.workspace = true
+ui.workspace = true
+util.workspace = true
+workspace.workspace = true
+
+[dev-dependencies]
+editor = { workspace = true, features = ["test-support"] }
+gpui = { workspace = true, features = ["test-support"] }
+indoc.workspace = true
+language = { workspace = true, features = ["test-support"] }
+menu.workspace = true
+project = { workspace = true, features = ["test-support"] }
+rope.workspace = true
+serde_json.workspace = true
+workspace = { workspace = true, features = ["test-support"] }
+
+[lints]
+workspace = true

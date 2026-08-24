@@ -1,0 +1,22 @@
+[package]
+name = "svg_preview"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+path = "src/svg_preview.rs"
+
+[dependencies]
+app_actions.workspace = true
+file_icons.workspace = true
+gpui.workspace = true
+language.workspace = true
+multi_buffer.workspace = true
+ui.workspace = true
+workspace.workspace = true
+
+[lints]
+workspace = true

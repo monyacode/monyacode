@@ -1,0 +1,46 @@
+[package]
+name = "command_palette"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+doctest = false
+path = "src/command_palette.rs"
+
+[dependencies]
+anyhow.workspace = true
+app_actions.workspace = true
+command_palette_hooks.workspace = true
+db.workspace = true
+fuzzy.workspace = true
+gpui.workspace = true
+log.workspace = true
+menu.workspace = true
+picker.workspace = true
+postage.workspace = true
+serde.workspace = true
+settings.workspace = true
+theme.workspace = true
+time.workspace = true
+ui.workspace = true
+util.workspace = true
+workspace.workspace = true
+
+[dev-dependencies]
+db = { workspace = true, features = ["test-support"] }
+editor = { workspace = true, features = ["test-support"] }
+go_to_line.workspace = true
+gpui = { workspace = true, features = ["test-support"] }
+language = { workspace = true, features = ["test-support"] }
+menu.workspace = true
+project = { workspace = true, features = ["test-support"] }
+workspace = { workspace = true, features = ["test-support"] }
+
+[features]
+test-support = ["db/test-support"]
+
+[lints]
+workspace = true

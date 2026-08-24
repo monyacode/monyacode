@@ -1,0 +1,22 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=$APP_NAME
+GenericName=Text Editor
+Comment=A code editor for humanoid apes and grumpy toads
+TryExec=$APP_CLI
+StartupNotify=$DO_STARTUP_NOTIFY
+Exec=$APP_CLI $APP_ARGS
+Icon=$APP_ICON
+Categories=Development;TextEditor;IDE;
+Keywords=monyacode;
+# To add MonyaCode to "Open Folder With..." context menu, add `inode/directory` to the MimeType field (semicolon separated)
+# Arch linux users have reported this setting MonyaCode as default file browser. See https://github.com/zed-industries/zed/pull/39076 and related issues.
+# If this happens to you, an unconfirmed fix may be to install Arch's `gnome-defaults-list` package.
+MimeType=text/plain;application/x-zerosize;x-scheme-handler/monyacode;
+Actions=NewWorkspace;
+StartupWMClass=app.liten.MonyaCode
+
+[Desktop Action NewWorkspace]
+Exec=$APP_CLI --new $APP_ARGS
+Name=Open a new workspace

@@ -1,0 +1,20 @@
+#:schema https://nexte.st/schemas/repo-config.json
+
+[test-groups]
+sequential-db-tests = { max-threads = 1 }
+
+[profile.default]
+slow-timeout = { period = "90s", terminate-after = 2 }
+
+[[profile.default.overrides]]
+filter = "package(db)"
+test-group = "sequential-db-tests"
+
+# Run slowest tests first
+[[profile.default.overrides]]
+filter = "package(worktree) and test(test_random_worktree_changes)"
+priority = 100
+
+[[profile.default.overrides]]
+filter = "package(extension_host) and test(test_extension_store_with_test_extension)"
+priority = 99

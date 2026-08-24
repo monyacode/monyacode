@@ -1,0 +1,125 @@
+[package]
+name = "editor"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+doctest = false
+path = "src/editor.rs"
+
+[[bench]]
+harness = false
+name = "editor_render"
+
+[[bench]]
+harness = false
+name = "display_map"
+
+[dependencies]
+aho-corasick.workspace = true
+anyhow.workspace = true
+app_actions.workspace = true
+assets.workspace = true
+buffer_diff.workspace = true
+clock.workspace = true
+collections.workspace = true
+convert_case.workspace = true
+db.workspace = true
+file_icons.workspace = true
+fs.workspace = true
+futures.workspace = true
+fuzzy.workspace = true
+git.workspace = true
+gpui.workspace = true
+indoc.workspace = true
+itertools.workspace = true
+language.workspace = true
+linkify.workspace = true
+log.workspace = true
+lsp.workspace = true
+markdown.workspace = true
+menu.workspace = true
+multi_buffer.workspace = true
+ordered-float.workspace = true
+parking_lot.workspace = true
+pretty_assertions.workspace = true
+project.workspace = true
+rand.workspace = true
+regex.workspace = true
+rope.workspace = true
+rpc.workspace = true
+schemars.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+settings.workspace = true
+smallvec.workspace = true
+smol.workspace = true
+snippet.workspace = true
+sum_tree.workspace = true
+task.workspace = true
+text.workspace = true
+theme.workspace = true
+tree-sitter-c = { workspace = true, optional = true }
+tree-sitter-html = { workspace = true, optional = true }
+tree-sitter-python = { workspace = true, optional = true }
+tree-sitter-rust = { workspace = true, optional = true }
+tree-sitter-typescript = { workspace = true, optional = true }
+ui.workspace = true
+unicode-script.workspace = true
+unicode-segmentation.workspace = true
+unindent = { workspace = true, optional = true }
+url.workspace = true
+util.workspace = true
+uuid.workspace = true
+vim_mode_setting.workspace = true
+workspace.workspace = true
+
+[dev-dependencies]
+criterion.workspace = true
+ctor.workspace = true
+gpui = { workspace = true, features = ["test-support"] }
+language = { workspace = true, features = ["test-support"] }
+languages = { workspace = true, features = ["test-support"] }
+lsp = { workspace = true, features = ["test-support"] }
+markdown = { workspace = true, features = ["test-support"] }
+multi_buffer = { workspace = true, features = ["test-support"] }
+project = { workspace = true, features = ["test-support"] }
+rand.workspace = true
+release_channel.workspace = true
+settings = { workspace = true, features = ["test-support"] }
+text = { workspace = true, features = ["test-support"] }
+theme = { workspace = true, features = ["test-support"] }
+tree-sitter-bash.workspace = true
+tree-sitter-c.workspace = true
+tree-sitter-html.workspace = true
+tree-sitter-md.workspace = true
+tree-sitter-rust.workspace = true
+tree-sitter-typescript.workspace = true
+tree-sitter-yaml.workspace = true
+unindent.workspace = true
+util = { workspace = true, features = ["test-support"] }
+workspace = { workspace = true, features = ["test-support"] }
+zlog.workspace = true
+
+[features]
+test-support = [
+  "gpui/test-support",
+  "language/test-support",
+  "multi_buffer/test-support",
+  "project/test-support",
+  "text/test-support",
+  "theme/test-support",
+  "tree-sitter-c",
+  "tree-sitter-html",
+  "tree-sitter-rust",
+  "tree-sitter-typescript",
+  "unindent",
+  "util/test-support",
+  "workspace/test-support",
+]
+
+[lints]
+workspace = true

@@ -1,0 +1,75 @@
+[package]
+name = "vim"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+doctest = false
+path = "src/vim.rs"
+
+[dependencies]
+anyhow.workspace = true
+app_actions.workspace = true
+async-compat = { workspace = true, "optional" = true }
+async-trait = { workspace = true, "optional" = true }
+collections.workspace = true
+command_palette.workspace = true
+command_palette_hooks.workspace = true
+db.workspace = true
+editor.workspace = true
+env_logger.workspace = true
+futures.workspace = true
+fuzzy.workspace = true
+gpui.workspace = true
+itertools.workspace = true
+language.workspace = true
+log.workspace = true
+menu.workspace = true
+multi_buffer.workspace = true
+nvim-rs = { workspace = true, optional = true }
+picker.workspace = true
+project.workspace = true
+regex.workspace = true
+schemars.workspace = true
+search.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+settings.workspace = true
+task.workspace = true
+text.workspace = true
+theme.workspace = true
+tokio = { workspace = true, optional = true }
+ui.workspace = true
+util.workspace = true
+util_macros.workspace = true
+vim_mode_setting.workspace = true
+workspace.workspace = true
+
+[dev-dependencies]
+command_palette = { workspace = true, features = ["test-support"] }
+editor = { workspace = true, features = ["test-support"] }
+git_ui = { workspace = true, features = ["test-support"] }
+gpui = { workspace = true, features = ["test-support"] }
+indoc.workspace = true
+language = { workspace = true, features = ["test-support"] }
+lsp = { workspace = true, features = ["test-support"] }
+markdown_preview.workspace = true
+outline_panel.workspace = true
+parking_lot.workspace = true
+perf.workspace = true
+project = { workspace = true, features = ["test-support"] }
+project_panel.workspace = true
+release_channel.workspace = true
+settings.workspace = true
+settings_ui.workspace = true
+util = { workspace = true, features = ["test-support"] }
+workspace = { workspace = true, features = ["test-support"] }
+
+[features]
+neovim = ["async-compat", "async-trait", "nvim-rs", "tokio"]
+
+[lints]
+workspace = true

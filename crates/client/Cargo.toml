@@ -1,0 +1,40 @@
+[package]
+name = "client"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+doctest = false
+path = "src/client.rs"
+
+[dependencies]
+anyhow.workspace = true
+async-tungstenite.workspace = true
+futures.workspace = true
+gpui.workspace = true
+http_client.workspace = true
+log.workspace = true
+parking_lot.workspace = true
+postage.workspace = true
+rpc = { workspace = true, features = ["gpui"] }
+serde.workspace = true
+settings.workspace = true
+thiserror.workspace = true
+url.workspace = true
+util.workspace = true
+
+[dev-dependencies]
+gpui = { workspace = true, features = ["test-support"] }
+http_client = { workspace = true, features = ["test-support"] }
+rpc = { workspace = true, features = ["test-support"] }
+settings = { workspace = true, features = ["test-support"] }
+util = { workspace = true, features = ["test-support"] }
+
+[features]
+test-support = ["gpui/test-support", "rpc/test-support"]
+
+[lints]
+workspace = true

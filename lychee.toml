@@ -1,0 +1,15 @@
+#:schema https://www.schemastore.org/lychee.json
+
+retry_wait_time = 5
+accept = ["200..=204", "429"]
+max_retries = 5
+timeout = 45
+exclude = [
+  # Slow and unreliable server.
+  "https://repology.org",
+
+  # The following websites are rate limited or use bot detection and aren't nice enough to respond with 429:
+  "https://linux.die.net/man/1/sed",
+  "https://allaboutcookies.org",
+  "https://www.gnu.org",
+]

@@ -1,0 +1,23 @@
+private = { ignore = true }
+# Licenses allowed in MonyaCode's dependencies. When adding to this list, please
+# check the following open source license policies:
+#
+# * https://opensource.google/documentation/reference/thirdparty/licenses
+accepted = [
+  "Apache-2.0",
+  "MIT",
+  "MIT-0",
+  "Apache-2.0 WITH LLVM-exception",
+  "MPL-2.0",
+  "BSD-3-Clause",
+  "BSD-2-Clause",
+  "ISC",
+  "CC0-1.0",
+  "NCSA",
+  "Unicode-3.0",
+  "OpenSSL",
+  "Zlib",
+  "BSL-1.0",
+  "CDLA-Permissive-2.0",
+  "WTFPL",
+]

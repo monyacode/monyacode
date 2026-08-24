@@ -1,0 +1,33 @@
+[package]
+name = "db"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+doctest = false
+path = "src/db.rs"
+
+[dependencies]
+anyhow.workspace = true
+gpui.workspace = true
+indoc.workspace = true
+log.workspace = true
+paths.workspace = true
+release_channel.workspace = true
+smol.workspace = true
+sqlez.workspace = true
+sqlez_macros.workspace = true
+util.workspace = true
+
+[dev-dependencies]
+gpui = { workspace = true, features = ["test-support"] }
+tempfile.workspace = true
+
+[features]
+test-support = []
+
+[lints]
+workspace = true

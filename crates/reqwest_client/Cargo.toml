@@ -1,0 +1,28 @@
+[package]
+name = "reqwest_client"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "Apache-2.0"
+publish.workspace = true
+
+[lib]
+doctest = true
+path = "src/reqwest_client.rs"
+
+[dependencies]
+anyhow.workspace = true
+bytes.workspace = true
+futures.workspace = true
+http_client.workspace = true
+http_client_tls.workspace = true
+log.workspace = true
+regex.workspace = true
+reqwest.workspace = true
+tokio.workspace = true
+
+[features]
+test-support = []
+
+[lints]
+workspace = true

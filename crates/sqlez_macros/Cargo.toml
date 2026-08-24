@@ -1,0 +1,19 @@
+[package]
+name = "sqlez_macros"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+doctest = false
+path = "src/sqlez_macros.rs"
+proc-macro = true
+
+[dependencies]
+sqlez.workspace = true
+syn.workspace = true
+
+[lints]
+workspace = true

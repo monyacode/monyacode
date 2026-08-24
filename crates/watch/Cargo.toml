@@ -1,0 +1,20 @@
+[package]
+name = "watch"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "Apache-2.0"
+publish.workspace = true
+
+[lib]
+path = "src/watch.rs"
+
+[dependencies]
+parking_lot.workspace = true
+
+[dev-dependencies]
+futures.workspace = true
+tokio.workspace = true
+
+[lints]
+workspace = true

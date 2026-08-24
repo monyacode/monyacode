@@ -1,0 +1,2 @@
+psql postgres -c "DROP DATABASE monyacode WITH (FORCE);"
+script/bootstrap

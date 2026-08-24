@@ -1,0 +1,29 @@
+[package]
+name = "git_hosting_providers"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+path = "src/git_hosting_providers.rs"
+
+[dependencies]
+anyhow.workspace = true
+async-trait.workspace = true
+git.workspace = true
+gpui.workspace = true
+regex.workspace = true
+settings.workspace = true
+url.workspace = true
+urlencoding.workspace = true
+util.workspace = true
+
+[dev-dependencies]
+git = { workspace = true, features = ["test-support"] }
+indoc.workspace = true
+pretty_assertions.workspace = true
+
+[lints]
+workspace = true

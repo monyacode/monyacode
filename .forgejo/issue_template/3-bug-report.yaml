@@ -1,0 +1,74 @@
+# yaml-language-server: $schema=https://www.schemastore.org/gitea-issue-forms.json
+name: "3: Bug Report"
+about: "[Advanced users only] Found something you weren't expecting? Report it here!"
+title: "bug: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **NOTE: This issue tracker is mainly for tracking and dealing with bugs. There is no big team working on MonyaCode so don't be surprised if issues and feature requests end up sitting around without much movement.**
+  - type: markdown
+    attributes:
+      value: |
+        - Please speak English, as this is the language all maintainers can speak and write.
+        - Be as clear and concise as possible. A very verbose report is harder to interpret in a concrete way.
+        - Be civil, and follow the [MonyaCode Code of Conduct](https://github.com/monyacode/monyacode/src/branch/main/CODE_OF_CONDUCT.md).
+        - Take a moment to [check that your issue hasn't been reported before](https://github.com/monyacode/monyacode/issues).
+  - type: markdown
+    attributes:
+      value: |
+        ### New workflow
+
+        We are currently experimenting with a new workflow to manage issues and better understand your problems and needs.
+
+        We are looking forward to your feedback!
+  - type: dropdown
+    id: can-reproduce
+    attributes:
+      label: Can you reproduce the bug?
+      description: |
+        - **Is it caused by hardware, for example missing support for your particular graphics device?**
+          If so, you are probably the person best suited to solve the problem since you are the one able to reproduce it. Start by trying to work out as much about the cause of the issue yourself, and include as much detail as you can in the issue. See the guide to debugging crashes in the documentation for more information on retrieving logs or using a debugger with MonyaCode.
+        - **Is it a packaging problem, like missing builds for Windows, missing packages for your architecture or support needed for a particular Linux distribution?**
+          Just like in the previous case, you are probably the one most able to fix the problem yourself. There is a mirror of the repository on Github only so that we can run Github Actions on platforms that we don't have runners for on Codeberg. Contributions to improve the workflows for both Forgejo and Github.
+      options:
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: |
+        Please provide a description of your issue here, if you were able to reproduce.
+    validations:
+      required: true
+  - type: input
+    id: monyacode-ver
+    attributes:
+      label: MonyaCode Version
+      description: MonyaCode version (or commit reference).
+  - type: textarea
+    id: versions
+    attributes:
+      label: Other details about your environment (software names and versions)
+      description: |
+        For any other issues, try to investigate the problem before creating an issue and try to provide relevant information (see the documentation for details on how to get logs from the editor).
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: |
+        It's really important to provide pertinent logs. You must give us `DEBUG` level logs.
+        Please read <https://github.com/monyacode/monyacode/src/branch/main/docs/development>.
+
+        Please copy and paste your logs here, with any sensitive information (e.g. API keys) removed/hidden.
+        You can wrap your logs in `<details>...</details>` tags so it doesn't take up too much space in the issue.
+  - type: markdown
+    attributes:
+      value: |
+        Thank you.

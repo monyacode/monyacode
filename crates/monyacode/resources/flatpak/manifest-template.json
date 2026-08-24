@@ -1,0 +1,60 @@
+{
+  "id": "$APP_ID",
+  "runtime": "org.freedesktop.Platform",
+  "runtime-version": "25.08",
+  "sdk": "org.freedesktop.Sdk",
+  "sdk-extensions": [
+    "org.freedesktop.Sdk.Extension.rust-stable"
+  ],
+  "command": "monyacode",
+  "finish-args": [
+    "--talk-name=org.freedesktop.Flatpak",
+    "--device=dri",
+    "--share=ipc",
+    "--share=network",
+    "--socket=wayland",
+    "--socket=fallback-x11",
+    "--filesystem=host"
+  ],
+  "build-options": {
+    "append-path": "/usr/lib/sdk/rust-stable/bin"
+  },
+  "modules": [
+    {
+      "name": "monyacode",
+      "buildsystem": "simple",
+      "build-options": {
+        "env": {
+          "APP_ID": "$APP_ID",
+          "APP_ICON": "$APP_ID",
+          "APP_NAME": "$APP_NAME",
+          "BRANDING_LIGHT": "$BRANDING_LIGHT",
+          "BRANDING_DARK": "$BRANDING_DARK",
+          "APP_CLI": "monyacode",
+          "APP_ARGS": "--foreground %U",
+          "DO_STARTUP_NOTIFY": "false"
+        }
+      },
+      "build-commands": [
+        "install -Dm644 $ICON_SCALABLE /app/share/icons/hicolor/scalable/apps/$APP_ID.svg",
+        "install -Dm644 $ICON_SYMBOLIC /app/share/icons/hicolor/symbolic/apps/$APP_ID-symbolic.svg",
+        "envsubst < monyacode.desktop.in > monyacode.desktop && install -Dm755 monyacode.desktop /app/share/applications/$APP_ID.desktop",
+        "envsubst < flatpak/monyacode.metainfo.xml.in > monyacode.metainfo.xml && install -Dm644 monyacode.metainfo.xml /app/share/metainfo/$APP_ID.metainfo.xml",
+        "sed -i -e '/@release_info@/{r flatpak/release-info/$CHANNEL' -e 'd}' /app/share/metainfo/$APP_ID.metainfo.xml",
+        "install -Dm755 bin/monyacode /app/bin/monyacode",
+        "install -Dm755 libexec/monyacode-editor /app/libexec/monyacode-editor",
+        "install -Dm755 lib/* -t /app/lib"
+      ],
+      "sources": [
+        {
+          "type": "archive",
+          "path": "./target/release/$ARCHIVE"
+        },
+        {
+          "type": "dir",
+          "path": "./crates/monyacode/resources"
+        }
+      ]
+    }
+  ]
+}

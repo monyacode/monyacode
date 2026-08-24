@@ -1,0 +1,19 @@
+[package]
+name = "assets"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+path = "src/assets.rs"
+
+[dependencies]
+anyhow.workspace = true
+gpui.workspace = true
+rust-embed.workspace = true
+serde_json.workspace = true
+
+[lints]
+workspace = true

@@ -1,0 +1,22 @@
+[package]
+name = "collections"
+version.workspace = true
+edition.workspace = true
+description = "Standard collection type re-exports used by MonyaCode and GPUI"
+repository.workspace = true
+license = "Apache-2.0"
+publish = false
+
+[lib]
+doctest = false
+path = "src/collections.rs"
+
+[dependencies]
+indexmap.workspace = true
+rustc-hash.workspace = true
+
+[features]
+test-support = []
+
+[lints]
+workspace = true

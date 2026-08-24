@@ -1,0 +1,19 @@
+#!/bin/bash
+set -eux
+version="$1"
+
+bundle_target() {
+  arch="$1"
+  target="$arch-apple-darwin"
+  cargo clean
+  ./script/bundle-mac $target
+  cp target/$target/release/MonyaCode-$arch.dmg ../monyacode-$version/MonyaCode-$arch-$version.dmg
+  cp target/monyacode-remote_server-macos*.gz ../monyacode-$version/monyacode-remote_server-macos-${arch}-${version}.gz
+}
+
+[ -d ../monyacode-$version ] || {
+  echo "../monyacode-$version does not exist" >&2
+  exit 1
+}
+bundle_target aarch64
+bundle_target x86_64

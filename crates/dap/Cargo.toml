@@ -1,0 +1,61 @@
+[package]
+name = "dap"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+doctest = false
+path = "src/dap.rs"
+
+[dependencies]
+anyhow.workspace = true
+async-compression.workspace = true
+async-pipe = { workspace = true, optional = true }
+async-tar.workspace = true
+async-trait.workspace = true
+collections.workspace = true
+dap-types.workspace = true
+fs.workspace = true
+futures.workspace = true
+gpui.workspace = true
+http_client.workspace = true
+language.workspace = true
+log.workspace = true
+node_runtime.workspace = true
+parking_lot.workspace = true
+paths.workspace = true
+proto.workspace = true
+schemars.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+settings.workspace = true
+smallvec.workspace = true
+smol.workspace = true
+task.workspace = true
+util.workspace = true
+
+[dev-dependencies]
+async-pipe.workspace = true
+gpui = { workspace = true, features = ["test-support"] }
+settings = { workspace = true, features = ["test-support"] }
+task = { workspace = true, features = ["test-support"] }
+util = { workspace = true, features = ["test-support"] }
+zlog.workspace = true
+
+[target.'cfg(not(windows))'.dependencies]
+libc.workspace = true
+
+[features]
+test-support = [
+  "async-pipe",
+  "gpui/test-support",
+  "settings/test-support",
+  "task/test-support",
+  "util/test-support",
+]
+
+[lints]
+workspace = true

@@ -1,0 +1,35 @@
+[package]
+name = "image_viewer"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+doctest = false
+path = "src/image_viewer.rs"
+
+[dependencies]
+anyhow.workspace = true
+db.workspace = true
+editor.workspace = true
+file_icons.workspace = true
+gpui.workspace = true
+language.workspace = true
+log.workspace = true
+project.workspace = true
+settings.workspace = true
+theme.workspace = true
+ui.workspace = true
+util.workspace = true
+workspace.workspace = true
+
+[dev-dependencies]
+editor = { workspace = true, features = ["test-support"] }
+
+[features]
+test-support = ["editor/test-support", "gpui/test-support"]
+
+[lints]
+workspace = true

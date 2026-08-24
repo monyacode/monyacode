@@ -1,0 +1,9 @@
+# yaml-language-server: $schema=https://www.schemastore.org/gitea-issue-config.json
+blank_issues_enabled: false
+contact_links:
+  - name: Chat
+    url: https://slidge.im/monyacode/#/guest?join=monyacode@rooms.slidge.im
+    about: XMPP chat room for MonyaCode
+  - name: Docs
+    url: https://monyacode-editor.com/docs
+    about: Documentation

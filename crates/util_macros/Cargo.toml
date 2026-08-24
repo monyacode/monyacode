@@ -1,0 +1,24 @@
+[package]
+name = "util_macros"
+version.workspace = true
+edition.workspace = true
+description = "Utility macros for MonyaCode"
+repository.workspace = true
+license = "Apache-2.0"
+publish = false
+
+[lib]
+doctest = false
+path = "src/util_macros.rs"
+proc-macro = true
+
+[dependencies]
+perf.workspace = true
+quote.workspace = true
+syn.workspace = true
+
+[features]
+perf-enabled = []
+
+[lints]
+workspace = true

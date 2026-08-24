@@ -1,0 +1,7 @@
+app: monyacode
+ingredients:
+  dist: noble
+  sources:
+    - deb http://de.archive.ubuntu.com/ubuntu noble main universe
+  debs:
+    - ${monyacode_dir}/target/${target_triple}/debian/*

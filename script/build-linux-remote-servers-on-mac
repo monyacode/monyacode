@@ -1,0 +1,41 @@
+#!/bin/bash
+set -euxo pipefail
+
+# Script for cross-compiling the remote-server binary
+# for Linux x86_64 and aarch64 from a Mac.
+#
+# Prerequisites:
+#
+# Add the rustup targets:
+#
+# rustup target add aarch64-unknown-linux-musl
+# rustup target add x86_64-unknown-linux-musl
+#
+# brew install filosottile/musl-cross/musl-cross
+#
+# Add these lines to ~/.cargo/config.toml:
+#
+# [target.x86_64-unknown-linux-musl]
+# linker = "x86_64-linux-musl-gcc"
+#
+# [target.aarch64-unknown-linux-musl]
+# linker = "aarch64-linux-musl-gcc"
+
+version="$(script/get-crate-version monyacode)"
+
+compile() {
+  arch="$1"
+  export CC=${arch}-linux-musl-gcc
+  export AWS_LC_SYS_CC=${arch}-linux-musl-gcc
+  cargo build \
+    --release \
+    --target ${arch}-unknown-linux-musl \
+    --package remote_server
+  cp target/${arch}-unknown-linux-musl/release/remote_server ./target/monyacode-remote-server-linux-${arch}-${version}
+  "${arch}-linux-musl-strip" ./target/monyacode-remote-server-linux-${arch}-${version}
+  gzip ./target/monyacode-remote-server-linux-${arch}-${version}
+  echo "./target/monyacode-remote-server-linux-${arch}-${version}"
+}
+
+compile aarch64
+compile x86_64

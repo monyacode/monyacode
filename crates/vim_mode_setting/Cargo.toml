@@ -1,0 +1,16 @@
+[package]
+name = "vim_mode_setting"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+path = "src/vim_mode_setting.rs"
+
+[dependencies]
+settings.workspace = true
+
+[lints]
+workspace = true

@@ -1,0 +1,22 @@
+#:schema https://www.schemastore.org/tombi.json
+
+toml-version = "v1.0.0"
+
+# Keep dependency inline tables on a single line.
+# Multi-line inline tables are TOML 1.1 syntax
+# that pycargoebuild (tomllib) rejects with
+# "parse_key*", so tombi must not expand them.
+
+[format]
+[format.rules]
+line-width = 255
+
+[schema]
+enabled = true
+catalog = { paths = ["https://www.schemastore.org/api/json/catalog.json"] }
+
+[[schemas]]
+# Keep Cargo.toml on TOML v1.0.0 for Nix builtins.fromTOML compatibility.
+toml-version = "v1.0.0"
+path = "tombi://www.schemastore.org/cargo.json"
+include = ["Cargo.toml"]

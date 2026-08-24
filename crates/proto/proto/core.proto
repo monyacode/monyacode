@@ -1,0 +1,20 @@
+syntax = "proto3";
+package monyacode.messages;
+
+message PeerId {
+    uint32 owner_id = 1;
+    uint32 id = 2;
+}
+
+message User {
+    reserved 4;
+    uint64 id = 1;
+    string email = 2;
+    string avatar_url = 3;
+    optional string name = 5;
+}
+
+message Nonce {
+    uint64 upper_half = 1;
+    uint64 lower_half = 2;
+}

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+curl --user krig:"$TOKEN" --upload-file "$DEB_FILE" https://codeberg.org/api/packages/MonyaCode/debian/pool/monyacode/release/upload
+curl --user krig:"$TOKEN" --upload-file "$RPM_FILE" https://codeberg.org/api/packages/MonyaCode/rpm/upload
+curl --user krig:"$TOKEN" --upload-file "$CRATE_FILE" "https://codeberg.org/api/packages/MonyaCode/generic/monyacode/$REF_NAME/$CRATE_FILE"

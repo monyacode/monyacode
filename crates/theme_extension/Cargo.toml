@@ -1,0 +1,20 @@
+[package]
+name = "theme_extension"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+path = "src/theme_extension.rs"
+
+[dependencies]
+anyhow.workspace = true
+extension.workspace = true
+fs.workspace = true
+gpui.workspace = true
+theme.workspace = true
+
+[lints]
+workspace = true

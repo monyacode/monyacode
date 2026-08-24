@@ -1,0 +1,24 @@
+[package]
+name = "zed_extension_api"
+version = "0.7.0"
+edition.workspace = true
+description = "APIs for creating MonyaCode extensions in Rust"
+documentation = "https://docs.rs/zed_extension_api"
+repository = "https://github.com/zed-industries/zed"
+license = "Apache-2.0"
+keywords = ["extension", "monyacode"]
+publish = true
+
+[package.metadata.component]
+target = { path = "wit" }
+
+[lib]
+path = "src/extension_api.rs"
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+wit-bindgen.workspace = true
+
+[lints]
+workspace = true

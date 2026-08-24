@@ -1,0 +1,39 @@
+[package]
+name = "buffer_diff"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+path = "src/buffer_diff.rs"
+
+[dependencies]
+clock.workspace = true
+futures.workspace = true
+gpui.workspace = true
+imara-diff.workspace = true
+language.workspace = true
+log.workspace = true
+pretty_assertions.workspace = true
+rope.workspace = true
+settings = { workspace = true, optional = true }
+sum_tree.workspace = true
+text.workspace = true
+util.workspace = true
+
+[dev-dependencies]
+ctor.workspace = true
+gpui = { workspace = true, features = ["test-support"] }
+rand.workspace = true
+settings.workspace = true
+text = { workspace = true, features = ["test-support"] }
+unindent.workspace = true
+zlog.workspace = true
+
+[features]
+test-support = ["settings"]
+
+[lints]
+workspace = true

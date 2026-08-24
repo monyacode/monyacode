@@ -1,0 +1,32 @@
+[package]
+name = "crashes"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+path = "src/crashes.rs"
+
+[dependencies]
+bitcode.workspace = true
+crash-handler.workspace = true
+extension_host.workspace = true
+log.workspace = true
+minidumper.workspace = true
+paths.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+smol.workspace = true
+system_specs.workspace = true
+zstd.workspace = true
+
+[target.'cfg(target_os = "macos")'.dependencies]
+mach2.workspace = true
+
+[target.'cfg(target_os = "windows")'.dependencies]
+windows.workspace = true
+
+[lints]
+workspace = true

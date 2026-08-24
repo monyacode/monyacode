@@ -1,0 +1,22 @@
+#!/bin/sh
+mode="$1" # ci or release
+
+cp ./.cargo/ci-config.toml ./.cargo/config.toml
+./script/linux
+./script/download-wasi-sdk
+
+# install nextest
+if ! command -v cargo-nextest >/dev/null; then
+  curl -LsSf https://get.nexte.st/latest/linux | \
+    tar zxf - -C ~/.cargo/bin
+fi
+
+if [ "$mode" = "release" ]; then
+  if ! command -v cargo-deb >/dev/null; then
+    cargo install cargo-deb
+  fi
+  if ! command -v cargo-generate-rpm >/dev/null; then
+    cargo install cargo-generate-rpm
+  fi
+fi
+

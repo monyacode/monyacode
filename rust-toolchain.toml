@@ -1,0 +1,8 @@
+#:schema https://www.schemastore.org/rust-toolchain.json
+
+[toolchain]
+channel = "1.98"
+profile = "minimal"
+components = ["rustfmt", "clippy", "rust-analyzer", "rust-src"]
+# extensions
+targets = ["wasm32-wasip2"]

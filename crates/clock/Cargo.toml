@@ -1,0 +1,22 @@
+[package]
+name = "clock"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+doctest = false
+path = "src/clock.rs"
+
+[dependencies]
+parking_lot = { workspace = true, optional = true }
+serde.workspace = true
+smallvec.workspace = true
+
+[features]
+test-support = ["dep:parking_lot"]
+
+[lints]
+workspace = true

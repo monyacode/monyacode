@@ -1,0 +1,32 @@
+[package]
+name = "notifications"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+doctest = false
+path = "src/notifications.rs"
+
+[dependencies]
+app_actions.workspace = true
+component.workspace = true
+gpui.workspace = true
+ui.workspace = true
+workspace.workspace = true
+
+[dev-dependencies]
+gpui = { workspace = true, features = ["test-support"] }
+
+[features]
+test-support = [
+  "gpui/test-support",
+]
+
+[lints]
+workspace = true
+
+[package.metadata.cargo-shear]
+ignored = ["component"]

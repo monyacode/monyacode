@@ -1,0 +1,5 @@
+#:schema https://www.schemastore.org/rustfmt.json
+
+edition = "2024"
+style_edition = "2024"
+max_width = 120

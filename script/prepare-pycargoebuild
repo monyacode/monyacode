@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+python3 -m pip install --user --break-system-packages pycargoebuild 2>/dev/null || python3 -m pip install --user pycargoebuild
+
+mkdir -p /tmp/portage/licenses /tmp/portage/metadata
+printf "[spdx-to-ebuild]\n" > /tmp/portage/metadata/license-mapping.conf
+
+mkdir -p /tmp/mock_portage/portage
+cat > /tmp/mock_portage/portage/__init__.py << "EOF"
+class Tree(dict):
+    def __init__(self):
+        super().__init__()
+        self["porttree"] = self
+        class _Repo:
+            location = "/tmp/portage"
+        class _Repos(dict):
+            def __getitem__(self, key):
+                return _Repo()
+        class _DBApi:
+            repositories = _Repos()
+        self.dbapi = _DBApi()
+        self.settings = {}
+def create_trees(*args, **kwargs):
+    return {"porttree": Tree()}
+EOF
+
+echo "$HOME/.local/bin" >> "${GITHUB_PATH:-/dev/null}"
+echo "PYTHONPATH=/tmp/mock_portage" >> "${GITHUB_ENV:-/dev/null}"

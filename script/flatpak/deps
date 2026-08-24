@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -xeuo pipefail
+
+# if root or if sudo/unavailable, define an empty variable
+if [ "$(id -u)" -eq 0 ]; then
+    maysudo=''
+else
+    maysudo="$(command -v sudo || command -v doas || true)"
+fi
+
+apt=$(command -v apt-get || true)
+$maysudo "$apt" install -y flatpak flatpak-builder
+
+flatpak remote-add --if-not-exists --user flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+arch=$(arch)
+fd_version=25.08
+flatpak install -y --user org.freedesktop.Platform/${arch}/${fd_version}
+flatpak install -y --user org.freedesktop.Sdk/${arch}/${fd_version}
+flatpak install -y --user org.freedesktop.Sdk.Extension.rust-stable/${arch}/${fd_version}

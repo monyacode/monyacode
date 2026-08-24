@@ -1,0 +1,27 @@
+[package]
+name = "proto"
+version.workspace = true
+edition.workspace = true
+description = "Shared protocol for communication between the MonyaCode app and the remote editing server"
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+doctest = false
+path = "src/proto.rs"
+
+[dependencies]
+anyhow.workspace = true
+prost.workspace = true
+serde.workspace = true
+
+[build-dependencies]
+prost-build.workspace = true
+protobuf-src.workspace = true
+
+[features]
+test-support = []
+
+[lints]
+workspace = true

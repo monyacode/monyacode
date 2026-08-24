@@ -1,0 +1,38 @@
+[package]
+name = "text"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+doctest = false
+path = "src/text.rs"
+
+[dependencies]
+anyhow.workspace = true
+clock.workspace = true
+collections.workspace = true
+log.workspace = true
+parking_lot.workspace = true
+postage.workspace = true
+rand.workspace = true
+regex.workspace = true
+rope.workspace = true
+smallvec.workspace = true
+sum_tree.workspace = true
+util.workspace = true
+
+[dev-dependencies]
+collections = { workspace = true, features = ["test-support"] }
+ctor.workspace = true
+gpui = { workspace = true, features = ["test-support"] }
+util = { workspace = true, features = ["test-support"] }
+zlog.workspace = true
+
+[features]
+test-support = ["util/test-support"]
+
+[lints]
+workspace = true

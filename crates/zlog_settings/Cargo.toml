@@ -1,0 +1,22 @@
+[package]
+name = "zlog_settings"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "GPL-3.0-or-later"
+publish.workspace = true
+
+[lib]
+path = "src/zlog_settings.rs"
+
+[dependencies]
+collections.workspace = true
+gpui.workspace = true
+settings.workspace = true
+zlog.workspace = true
+
+[features]
+default = []
+
+[lints]
+workspace = true
