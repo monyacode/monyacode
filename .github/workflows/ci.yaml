@@ -165,22 +165,3 @@ jobs:
           name: monyacode-remote-server-${{ matrix.artifact_name}}-${{ matrix.target }}.zip
           path: target/monyacode-remote-server-windows-x86_64.zip
           if-no-files-found: warn
-
-  release:
-    name: Publish release
-    if: github.ref_type == 'tag'
-    needs: [build-linux, build-windows]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Download release artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: artifacts
-          merge-multiple: true
-
-      - name: Publish GitHub release
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" artifacts/* --repo "$GITHUB_REPOSITORY" --verify-tag --generate-notes
