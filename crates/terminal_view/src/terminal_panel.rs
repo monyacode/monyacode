@@ -1432,6 +1432,13 @@ impl Panel for TerminalPanel {
             return;
         }
         cx.defer_in(window, |this, window, cx| {
+            // The dock can be toggled closed again before the deferred callback runs.
+            // Do not spawn a hidden shell in that race, otherwise the next toggle can
+            // find a pending terminal and appear to do nothing.
+            if !this.active || !this.has_no_terminals(cx) {
+                return;
+            }
+
             let Ok(kind) = this
                 .workspace
                 .update(cx, |workspace, cx| default_working_directory(workspace, cx))
