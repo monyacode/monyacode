@@ -99,7 +99,7 @@ jobs:
         with:
           key: release-linux-${{ matrix.target }}
       - name: Install build dependencies
-        run: sudo apt-get update && sudo apt-get install -y clang lld dpkg-dev pkg-config libglib2.0-dev libgtk-3-dev libgdk-pixbuf-2.0-dev libpango1.0-dev libatk1.0-dev libcairo2-dev libx11-dev libwayland-dev libxkbcommon-dev libudev-dev libfontconfig1-dev libasound2-dev
+        run: sudo apt-get update && sudo apt-get install -y clang lld dpkg-dev pkg-config libglib2.0-dev libgtk-3-dev libgdk-pixbuf-2.0-dev libpango1.0-dev libatk1.0-dev libcairo2-dev libx11-dev libwayland-dev libxkbcommon-dev libxkbcommon-x11-dev libudev-dev libfontconfig1-dev libasound2-dev
       - name: Build MonyaCode
         run: cargo build --release --package monyacode --package cli --target ${{ matrix.target }}
       - name: Verify binary architecture
