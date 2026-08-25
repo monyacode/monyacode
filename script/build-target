@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+target="${1:-}"
+if [[ -z "$target" ]]; then
+    echo "Usage: ${0##*/} <rust-target>" >&2
+    exit 2
+fi
+
+rustup target add "$target"
+cargo build --release --package monyacode --package cli --target "$target"
+
+echo "Built target/${target}/release/monyacode"
+echo "Built target/${target}/release/cli"

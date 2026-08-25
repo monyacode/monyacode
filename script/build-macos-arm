@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+readonly TARGET="aarch64-apple-darwin"
+
+usage() {
+    cat <<EOF
+Usage: ${0##*/} [--dmg]
+
+Build MonyaCode for Apple Silicon.
+
+  (default)  Release binaries only
+  --dmg      Build the signed/local MonyaCode DMG bundle
+
+The Cargo target is: ${TARGET}
+EOF
+}
+
+case "${1:-}" in
+    "")
+        ./script/build-target "$TARGET"
+        ;;
+    --dmg)
+        ./script/bundle-mac "$TARGET"
+        echo "Built target/${TARGET}/release/MonyaCode-aarch64.dmg"
+        ;;
+    -h|--help)
+        usage
+        ;;
+    *)
+        echo "Unknown option: $1" >&2
+        usage >&2
+        exit 2
+        ;;
+esac

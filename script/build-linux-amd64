@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+readonly TARGET="x86_64-unknown-linux-gnu"
+
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+    echo "Usage: ${0##*/}"
+    echo "Build MonyaCode for Linux amd64 (${TARGET})."
+    exit 0
+fi
+
+./script/build-target "$TARGET"

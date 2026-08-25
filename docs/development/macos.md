@@ -68,6 +68,42 @@ For a release build:
 cargo run --release
 ```
 
+For an explicit Apple Silicon build, use the `aarch64-apple-darwin` target:
+
+```zsh
+rustup target add aarch64-apple-darwin
+cargo build --release --package monyacode --package cli --target aarch64-apple-darwin
+```
+
+The quick helper builds the same target:
+
+```zsh
+./script/build-macos-arm
+```
+
+To create a local Apple Silicon DMG:
+
+```zsh
+./script/build-macos-arm --dmg
+```
+
+The DMG is written to `target/aarch64-apple-darwin/release/MonyaCode-aarch64.dmg`.
+
+Quick helpers are available for every release target:
+
+| Target | Rust target | Helper |
+| --- | --- | --- |
+| macOS Apple Silicon | `aarch64-apple-darwin` | `./script/build-macos-arm` |
+| macOS Intel | `x86_64-apple-darwin` | `./script/build-macos-intel` |
+| Linux amd64 | `x86_64-unknown-linux-gnu` | `./script/build-linux-amd64` |
+| Linux arm64 | `aarch64-unknown-linux-gnu` | `./script/build-linux-arm64` |
+| Windows x86_64 | `x86_64-pc-windows-msvc` | `./script/build-windows-x86_64` |
+
+Each helper builds the MonyaCode and CLI release binaries. The two macOS helpers
+also accept `--dmg` to create a local DMG. Linux and Windows cross-builds need
+their platform linker and SDK installed, so GitHub Actions remains the reliable
+way to produce distributable packages for those targets.
+
 And to run the tests:
 
 ```zsh
