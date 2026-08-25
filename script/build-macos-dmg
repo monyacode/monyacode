@@ -30,12 +30,11 @@ app="$root/MonyaCode.app"
 dmg_dir="$root/dmg"
 dmg="$root/MonyaCode-${arch_suffix}.dmg"
 
-./script/mac-icon-to-car
 rm -rf "$app" "$dmg_dir" "$dmg"
 mkdir -p "$app/Contents/MacOS" "$app/Contents/Resources" "$dmg_dir"
 install -m 0755 "$root/monyacode" "$app/Contents/MacOS/MonyaCode"
 install -m 0755 "$root/cli" "$app/Contents/MacOS/monyacode"
-install -m 0644 target/Assets.car "$app/Contents/Resources/Assets.car"
+install -m 0644 crates/monyacode/resources/app-icon@2x.png "$app/Contents/Resources/MonyaCode.png"
 if [[ -x /usr/bin/git ]]; then
     install -m 0755 /usr/bin/git "$app/Contents/MacOS/git"
 fi
@@ -49,7 +48,7 @@ cat > "$app/Contents/Info.plist" <<PLIST
 <key>CFBundleExecutable</key><string>MonyaCode</string>
 <key>CFBundleIdentifier</key><string>app.liten.MonyaCode</string>
 <key>CFBundlePackageType</key><string>APPL</string>
-<key>CFBundleIconName</key><string>Icon</string>
+<key>CFBundleIconFile</key><string>MonyaCode.png</string>
 <key>CFBundleVersion</key><string>0.1.0-local</string>
 <key>CFBundleShortVersionString</key><string>0.1.0-local</string>
 <key>LSMinimumSystemVersion</key><string>10.15.7</string>
