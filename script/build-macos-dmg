@@ -32,11 +32,13 @@ dmg="$root/MonyaCode-${arch_suffix}.dmg"
 
 rm -rf "$app" "$dmg_dir" "$dmg"
 mkdir -p "$app/Contents/MacOS" "$app/Contents/Resources" "$dmg_dir"
-install -m 0755 "$root/monyacode" "$app/Contents/MacOS/MonyaCode"
-install -m 0755 "$root/cli" "$app/Contents/MacOS/monyacode"
-install -m 0644 crates/monyacode/resources/app-icon@2x.png "$app/Contents/Resources/MonyaCode.png"
+cp "$root/monyacode" "$app/Contents/MacOS/MonyaCode"
+cp "$root/cli" "$app/Contents/MacOS/cli"
+cp crates/monyacode/resources/app-icon@2x.png "$app/Contents/Resources/MonyaCode.png"
+chmod 0755 "$app/Contents/MacOS/MonyaCode" "$app/Contents/MacOS/cli"
 if [[ -x /usr/bin/git ]]; then
-    install -m 0755 /usr/bin/git "$app/Contents/MacOS/git"
+    cp /usr/bin/git "$app/Contents/MacOS/git"
+    chmod 0755 "$app/Contents/MacOS/git"
 fi
 
 cat > "$app/Contents/Info.plist" <<PLIST

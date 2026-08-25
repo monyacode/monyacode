@@ -76,7 +76,7 @@ jobs:
           app="$root/MonyaCode.app"
           mkdir -p "$app/Contents/MacOS" "$app/Contents/Resources"
           install -m 0755 "$root/monyacode" "$app/Contents/MacOS/MonyaCode"
-          install -m 0755 "$root/cli" "$app/Contents/MacOS/monyacode"
+          install -m 0755 "$root/cli" "$app/Contents/MacOS/cli"
           install -m 0644 crates/monyacode/resources/app-icon@2x.png "$app/Contents/Resources/MonyaCode.png"
           cat > "$app/Contents/Info.plist" <<PLIST
           <?xml version="1.0" encoding="UTF-8"?>
@@ -205,11 +205,12 @@ jobs:
           $version = "${env:RELEASE_VERSION}".TrimStart('v')
           New-Item -ItemType Directory -Force -Path package | Out-Null
           Copy-Item target/release/monyacode.exe package/MonyaCode.exe
-          Copy-Item target/release/cli.exe package/monyacode.exe
+          Copy-Item target/release/cli.exe package/monyacode-cli.exe
           Copy-Item LICENSE-GPL package/LICENSE-GPL
           Compress-Archive -Path package/* -DestinationPath "MonyaCode-$version-windows-x86_64.zip"
           Expand-Archive -LiteralPath "MonyaCode-$version-windows-x86_64.zip" -DestinationPath verify -Force
-          if (-not (Test-Path verify/MonyaCode.exe)) { throw 'Windows package verification failed' }
+          if (-not (Test-Path verify/MonyaCode.exe)) { throw 'Windows editor package verification failed' }
+          if (-not (Test-Path verify/monyacode-cli.exe)) { throw 'Windows CLI package verification failed' }
       - uses: actions/upload-artifact@v4
         with:
           name: MonyaCode-${{ env.RELEASE_VERSION }}-windows-x86_64
