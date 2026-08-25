@@ -6,23 +6,35 @@
   <meta name="description" content="MonyaCode - a fast, native, distraction-free code editor.">
   <title>MonyaCode - Native code editing</title>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script>tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['IBM Plex Sans','ui-sans-serif','system-ui'],mono:['JetBrains Mono','ui-monospace']},colors:{ink:'#202329',paw:'#8d6f53'}}}};</script>
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    :root { --bg:#f3f2f0; --panel:#fbfaf8; --text:#20242a; --muted:#68717b; --line:#d9dde1; --accent:#587b9d; --accent-2:#e6edf3; }
-    .dark { --bg:#0d1116; --panel:#161d27; --text:#ebe7e4; --muted:#9fa4ab; --line:#3b434d; --accent:#6a9fcc; --accent-2:#253140; }
+    :root { --bg:#efeeeb; --panel:#faf9f6; --panel-raised:#ffffff; --text:#202329; --muted:#68717b; --line:#d7d9d8; --accent:#8d6f53; --accent-2:#ebe4dc; --focus:#b49578; --shadow:0 18px 50px #25211d12; }
+    .dark { --bg:#0b0d10; --panel:#11151a; --panel-raised:#171c22; --text:#f0eee9; --muted:#a3a9b0; --line:#30363d; --accent:#c6a582; --accent-2:#27221d; --focus:#d7b991; --shadow:0 18px 60px #0008; }
     * { box-sizing:border-box; }
     [x-cloak] { display:none !important; }
     html { scroll-behavior:smooth; }
-    body { margin:0; background:var(--bg); color:var(--text); font:16px/1.6 ui-sans-serif,system-ui,-apple-system,sans-serif; }
+    body { margin:0; background:radial-gradient(circle at 78% 0%, #ffffff66, transparent 34rem),var(--bg); color:var(--text); font:16px/1.6 ui-sans-serif,system-ui,-apple-system,sans-serif; }
+    .dark body { background:radial-gradient(circle at 78% 0%, #25303d55, transparent 34rem),var(--bg); }
     a { color:inherit; }
+    a, button, .button { -webkit-tap-highlight-color:transparent; }
+    button, .button { transition:transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease; }
+    button:hover, .button:hover { transform:translateY(-2px); }
+    button:focus-visible, .button:focus-visible, .search:focus-visible { outline:3px solid color-mix(in srgb,var(--focus) 55%,transparent); outline-offset:3px; }
+    .button.primary::before { content:""; width:16px; height:16px; flex:none; background:currentColor; mask:radial-gradient(circle at 18% 28%,#000 0 2px,transparent 2.4px),radial-gradient(circle at 50% 16%,#000 0 2px,transparent 2.4px),radial-gradient(circle at 82% 28%,#000 0 2px,transparent 2.4px),radial-gradient(ellipse at 50% 73%,#000 0 5px,transparent 5.4px); mask-composite:source-over; }
+    .dark .button.primary::before { background:#211b16; }
     .shell { display:grid; grid-template-columns:260px minmax(0,1fr); min-height:100vh; }
-    aside { position:sticky; top:0; height:100vh; padding:28px 22px; border-right:1px solid var(--line); background:var(--panel); }
+    aside { position:sticky; top:0; height:100vh; padding:28px 22px; border-right:1px solid var(--line); background:color-mix(in srgb,var(--panel) 92%,transparent); box-shadow:12px 0 40px #17191c08; backdrop-filter:blur(18px); }
     .brand { display:flex; gap:11px; align-items:center; font-weight:800; font-size:1.1rem; text-decoration:none; margin-bottom:34px; }
-    .brand img { width:34px; height:34px; object-fit:cover; border-radius:10px; }
-    nav a { display:block; padding:8px 10px; margin:3px 0; border-radius:8px; color:var(--muted); text-decoration:none; }
-    nav a:hover, nav a.active { color:var(--text); background:var(--accent-2); }
+    .brand img { width:36px; height:36px; object-fit:contain; border-radius:12px; background:var(--accent-2); padding:4px; }
+    nav a { display:block; padding:9px 11px; margin:4px 0; border-radius:10px; color:var(--muted); text-decoration:none; transition:background .18s ease,color .18s ease,transform .18s ease; }
+    nav a:hover, nav a.active { color:var(--text); background:var(--accent-2); transform:translateX(3px); }
     .side-actions { position:absolute; bottom:24px; left:22px; right:22px; display:grid; gap:8px; }
-    button, .button { border:1px solid var(--line); border-radius:8px; padding:9px 13px; background:var(--panel); color:var(--text); cursor:pointer; text-decoration:none; text-align:center; font:inherit; }
-    .button.primary { background:var(--accent); color:#101820; border-color:var(--accent); font-weight:700; }
+    button, .button { display:inline-flex; align-items:center; justify-content:center; gap:8px; border:1px solid var(--line); border-radius:999px; padding:10px 15px; background:var(--panel-raised); color:var(--text); cursor:pointer; text-decoration:none; text-align:center; font:inherit; box-shadow:0 4px 0 color-mix(in srgb,var(--line) 72%,transparent); }
+    .button.primary { background:var(--accent); color:#211b16; border-color:var(--accent); font-weight:750; box-shadow:0 5px 0 color-mix(in srgb,var(--accent) 48%,#000); }
+    .button.primary:hover { box-shadow:0 7px 0 color-mix(in srgb,var(--accent) 48%,#000); }
+    .paw-icon { width:16px; height:16px; flex:none; fill:currentColor; }
+    .button.primary .paw-icon { transform:rotate(-12deg); }
     main { max-width:1100px; width:100%; margin:auto; padding:34px 7vw 80px; }
     .topbar { display:flex; justify-content:flex-end; gap:8px; margin-bottom:54px; }
     .hero { display:grid; grid-template-columns:1.2fr .8fr; gap:50px; align-items:center; min-height:500px; }
@@ -31,7 +43,8 @@
     h2 { font-size:2rem; letter-spacing:-.04em; margin-top:0; }
     h3 { margin-bottom:4px; }
     .lead { color:var(--muted); font-size:1.18rem; max-width:590px; }
-    .hero-art { width:min(100%,420px); justify-self:end; border-radius:24px; box-shadow:0 22px 70px #18222d26; }
+    .hero-art { width:min(100%,420px); justify-self:end; border-radius:28px; box-shadow:var(--shadow); filter:drop-shadow(0 16px 20px #17191c18); transition:transform .35s ease; }
+    .hero-art:hover { transform:rotate(2deg) translateY(-6px); }
     .showcase { display:grid; gap:20px; }
     .screens-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; }
     .screen-frame { margin:0; overflow:hidden; border:1px solid var(--line); border-radius:14px; background:var(--panel); box-shadow:0 18px 50px #18222d18; }
@@ -40,7 +53,8 @@
     .actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:28px; }
     section { scroll-margin-top:30px; padding:90px 0 20px; border-top:1px solid var(--line); }
     .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
-    .card { padding:20px; border:1px solid var(--line); border-radius:14px; background:var(--panel); }
+    .card { padding:22px; border:1px solid var(--line); border-radius:18px; background:var(--panel-raised); box-shadow:var(--shadow); transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease; }
+    .card:hover { transform:translateY(-4px); border-color:color-mix(in srgb,var(--accent) 55%,var(--line)); box-shadow:0 22px 55px #17191c18; }
     .card p, .muted { color:var(--muted); }
     code, pre { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
     pre { overflow:auto; padding:18px; border-radius:12px; background:#17212c; color:#d9e6f0; }
@@ -53,7 +67,7 @@
   </style>
 </head>
 <body>
-  <div class="shell">
+  <div class="shell min-h-screen antialiased">
     <aside>
       <a class="brand" href="#top"><img src="assets/images/monyacode-logo-monochrome.png" alt=""> MonyaCode</a>
       <input class="search" x-model="query" @keydown.escape="query=''" @keydown.window.ctrl.k.prevent="$refs.search.focus()" x-ref="search" placeholder="Quick jump (Ctrl K)">
@@ -66,13 +80,13 @@
       </nav>
       <div class="side-actions"><a class="button primary" href="https://github.com/monyacode/monyacode/releases/latest">Download</a><button @click="dark=!dark" x-text="dark ? 'Light mode' : 'Dark mode'"></button></div>
     </aside>
-    <main id="top">
+    <main id="top" class="mx-auto w-full">
       <div class="topbar"><a href="https://github.com/monyacode/monyacode">GitHub</a></div>
       <header class="hero">
         <div><div class="eyebrow">Native. Focused. Yours.</div><h1>Code with<br>cattitude.</h1><p class="lead">MonyaCode is a fast, native Rust editor for developers who want a focused workspace without telemetry, subscriptions, or distractions.</p><div class="actions"><a class="button primary" href="https://github.com/monyacode/monyacode/releases/latest">Get MonyaCode</a><a class="button" href="https://github.com/monyacode/monyacode">View source</a></div></div>
         <img class="hero-art" src="assets/images/monyacode-logo.png" alt="MonyaCode cat logo">
       </header>
-      <section id="screens" class="showcase"><div><div class="eyebrow">A familiar workspace</div><h2>Quiet tools. Serious claws.</h2><p class="muted">A focused welcome screen when you arrive, and a spacious editor when you get to work.</p></div><div class="screens-grid"><figure class="screen-frame"><img src="assets/images/appscreen1.png" alt="MonyaCode welcome screen with open project actions"><figcaption>Start cleanly with projects, files, repositories, and the command palette.</figcaption></figure><figure class="screen-frame"><img src="assets/images/appscreen2.png" alt="MonyaCode editor showing a Rust source file"><figcaption>Keep the editor calm while your code, Git, and language tools stay close.</figcaption></figure><figure class="screen-frame"><img src="assets/images/appscreen3.png" alt="MonyaCode workspace with integrated development tools"><figcaption>Move from exploration to execution with the workspace arranged around your flow.</figcaption></figure></div></section>
+      <section id="screens" class="showcase scroll-mt-8"><div><div class="eyebrow">A familiar workspace</div><h2>Quiet tools. Serious claws.</h2><p class="muted">A focused welcome screen when you arrive, and a spacious editor when you get to work.</p></div><div class="screens-grid"><figure class="screen-frame group transition duration-300 hover:-translate-y-1"><img loading="lazy" decoding="async" src="assets/images/appscreen1.png" alt="MonyaCode welcome screen with open project actions"><figcaption>Start cleanly with projects, files, repositories, and the command palette.</figcaption></figure><figure class="screen-frame group transition duration-300 hover:-translate-y-1"><img loading="lazy" decoding="async" src="assets/images/appscreen2.png" alt="MonyaCode editor showing a Rust source file"><figcaption>Keep the editor calm while your code, Git, and language tools stay close.</figcaption></figure><figure class="screen-frame group transition duration-300 hover:-translate-y-1"><img loading="lazy" decoding="async" src="assets/images/appscreen3.png" alt="MonyaCode workspace with integrated development tools"><figcaption>Move from exploration to execution with the workspace arranged around your flow.</figcaption></figure></div></section>
       <section id="download"><h2>Download</h2><p class="muted">Release downloads are served directly from GitHub. The latest release is the source of truth.</p><div class="grid"><div class="card"><h3>Linux Intel</h3><p>Debian package for x86_64 systems.</p><a class="button primary" :href="asset('linux-amd64')">Download .deb</a></div><div class="card"><h3>Linux ARM</h3><p>Debian package for ARM64 systems.</p><a class="button primary" :href="asset('linux-arm64')">Download .deb</a></div><div class="card"><h3>macOS</h3><p>Apple Silicon and Intel app bundles.</p><div class="actions"><a class="button primary" :href="asset('macos-arm64')">Apple Silicon</a><a class="button" :href="asset('macos-x86_64')">Intel</a></div></div><div class="card"><h3>Windows</h3><p>Ready-to-install Windows package.</p><a class="button primary" :href="asset('windows')">Download Windows</a></div><div class="card"><h3>All releases</h3><p>Browse every published build and checksum.</p><a class="button" href="https://github.com/monyacode/monyacode/releases">GitHub Releases</a></div></div></section>
       <section id="features"><h2>Built for focused work</h2><div class="grid"><div class="card"><h3>Native performance</h3><p>Rust and GPU-accelerated UI keep the editor responsive while large projects stay open.</p></div><div class="card"><h3>Language intelligence</h3><p>Language servers provide completion, diagnostics, rename, go-to definition, formatting, and code actions.</p></div><div class="card"><h3>Git, close at hand</h3><p>Browse changes, stage files, inspect history, resolve conflicts, and commit without leaving the workspace.</p></div><div class="card"><h3>Terminal and tasks</h3><p>Run shells, build commands, tests, and project tasks in integrated terminal panes with the current project context.</p></div><div class="card"><h3>Debugging and REPL</h3><p>Use DAP debuggers and interactive REPL workflows alongside the code you are inspecting.</p></div><div class="card"><h3>Modes and themes</h3><p>Shape the editor with Vim or Helix modal editing, keymaps, themes, icon themes, and extensions.</p></div></div></section>
       <section id="docs"><h2>Documentation, inside the editor</h2><p class="muted">The built-in documentation covers the editor from first launch to advanced workflows. These are the guides you can use when you want to go deeper.</p><div class="grid"><div class="card"><h3>Start and configure</h3><p>Learn the command palette, key bindings, snippets, toolchains, language settings, themes, icon themes, and visual customization.</p></div><div class="card"><h3>Write and navigate</h3><p>Use multibuffers, the outline panel, completions, diagnostics, tab switching, Vim mode, Helix mode, and SuperTab.</p></div><div class="card"><h3>Build and ship</h3><p>Run tasks and terminal commands, work with Git, inspect debugger sessions, and use REPL workflows including notebooks.</p></div><div class="card"><h3>Connect and extend</h3><p>Develop over SSH, configure language servers, and add language, debugger, theme, and icon capabilities from source.</p></div><div class="card"><h3>Supported platforms</h3><p>Use the same workspace across macOS, Linux, Windows, and FreeBSD, with native packages and source builds where available.</p></div><div class="card"><h3>Principles</h3><p>No telemetry, proprietary server dependency, forced sign-in, involuntary updates, or distracting collaboration layer. Your tools stay yours.</p></div></div><div class="actions"><a class="button" href="https://github.com/monyacode/monyacode/tree/main/docs">Browse the full documentation</a></div></section>
