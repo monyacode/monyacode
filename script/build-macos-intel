@@ -6,7 +6,7 @@ readonly TARGET="x86_64-apple-darwin"
 
 case "${1:-}" in
     "") ./script/build-target "$TARGET" ;;
-    --dmg) ./script/bundle-mac "$TARGET" ;;
+    --dmg) ./script/build-macos-dmg "$TARGET" ;;
     -h|--help)
         echo "Usage: ${0##*/} [--dmg]"
         echo "Build MonyaCode for Intel macOS (${TARGET})."

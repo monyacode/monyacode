@@ -22,8 +22,7 @@ case "${1:-}" in
         ./script/build-target "$TARGET"
         ;;
     --dmg)
-        ./script/bundle-mac "$TARGET"
-        echo "Built target/${TARGET}/release/MonyaCode-aarch64.dmg"
+        ./script/build-macos-dmg "$TARGET"
         ;;
     -h|--help)
         usage

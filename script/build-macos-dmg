@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+target="${1:-}"
+skip_build=false
+if [[ "${2:-}" == "--no-build" ]]; then
+    skip_build=true
+elif [[ -n "${2:-}" ]]; then
+    echo "Usage: ${0##*/} <aarch64-apple-darwin|x86_64-apple-darwin> [--no-build]" >&2
+    exit 2
+fi
+
+case "$target" in
+    aarch64-apple-darwin) arch_suffix="aarch64" ;;
+    x86_64-apple-darwin) arch_suffix="x86_64" ;;
+    *)
+        echo "Usage: ${0##*/} <aarch64-apple-darwin|x86_64-apple-darwin>" >&2
+        exit 2
+        ;;
+esac
+
+if [[ "$skip_build" == false ]]; then
+    ./script/build-target "$target"
+    cargo build --release --package remote_server --target "$target"
+fi
+
+root="target/${target}/release"
+app="$root/MonyaCode.app"
+dmg_dir="$root/dmg"
+dmg="$root/MonyaCode-${arch_suffix}.dmg"
+
+./script/mac-icon-to-car
+rm -rf "$app" "$dmg_dir" "$dmg"
+mkdir -p "$app/Contents/MacOS" "$app/Contents/Resources" "$dmg_dir"
+install -m 0755 "$root/monyacode" "$app/Contents/MacOS/MonyaCode"
+install -m 0755 "$root/cli" "$app/Contents/MacOS/monyacode"
+install -m 0644 target/Assets.car "$app/Contents/Resources/Assets.car"
+if [[ -x /usr/bin/git ]]; then
+    install -m 0755 /usr/bin/git "$app/Contents/MacOS/git"
+fi
+
+cat > "$app/Contents/Info.plist" <<PLIST
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+<key>CFBundleName</key><string>MonyaCode</string>
+<key>CFBundleDisplayName</key><string>MonyaCode</string>
+<key>CFBundleExecutable</key><string>MonyaCode</string>
+<key>CFBundleIdentifier</key><string>app.liten.MonyaCode</string>
+<key>CFBundlePackageType</key><string>APPL</string>
+<key>CFBundleIconName</key><string>Icon</string>
+<key>CFBundleVersion</key><string>0.1.0-local</string>
+<key>CFBundleShortVersionString</key><string>0.1.0-local</string>
+<key>LSMinimumSystemVersion</key><string>10.15.7</string>
+<key>CFBundleURLTypes</key><array><dict><key>CFBundleURLSchemes</key><array><string>monyacode</string></array></dict></array>
+</dict></plist>
+PLIST
+
+mv "$app" "$dmg_dir/MonyaCode.app"
+ln -s /Applications "$dmg_dir/Applications"
+hdiutil create -volname MonyaCode -srcfolder "$dmg_dir" -ov -format UDZO "$dmg"
+rm "$dmg_dir/Applications"
+
+echo "Built $dmg"
