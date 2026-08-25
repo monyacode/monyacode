@@ -77,7 +77,7 @@ jobs:
           mkdir -p "$app/Contents/MacOS" "$app/Contents/Resources"
           install -m 0755 "$root/monyacode" "$app/Contents/MacOS/MonyaCode"
           install -m 0755 "$root/cli" "$app/Contents/MacOS/cli"
-          install -m 0644 crates/monyacode/resources/app-icon@2x.png "$app/Contents/Resources/MonyaCode.png"
+          ./script/build-macos-icns "$app/Contents/Resources/MonyaCode.icns"
           cat > "$app/Contents/Info.plist" <<PLIST
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -87,16 +87,31 @@ jobs:
           <key>CFBundleExecutable</key><string>MonyaCode</string>
           <key>CFBundleIdentifier</key><string>app.monyacode.MonyaCode</string>
           <key>CFBundlePackageType</key><string>APPL</string>
-          <key>CFBundleIconFile</key><string>MonyaCode.png</string>
+          <key>CFBundleIconFile</key><string>MonyaCode.icns</string>
           <key>CFBundleShortVersionString</key><string>$version</string>
           <key>CFBundleVersion</key><string>$version</string>
           <key>LSMinimumSystemVersion</key><string>10.15.7</string>
           <key>CFBundleURLTypes</key><array><dict><key>CFBundleURLSchemes</key><array><string>monyacode</string></array></dict></array>
           </dict></plist>
           PLIST
+          # Sign only after every bundle file has been assembled. This keeps the
+          # fallback ad-hoc signature structurally valid until Developer ID
+          # signing and notarization credentials are configured.
+          codesign --force --deep --sign - "$app"
+          codesign --verify --deep --strict "$app"
           ditto -c -k --sequesterRsrc --keepParent "$app" "MonyaCode-${version}-macos-${{ matrix.arch }}.zip"
       - name: Verify macOS package
-        run: unzip -t "MonyaCode-${RELEASE_VERSION#v}-macos-${{ matrix.arch }}.zip"
+        shell: bash
+        run: |
+          set -euo pipefail
+          package="MonyaCode-${RELEASE_VERSION#v}-macos-${{ matrix.arch }}.zip"
+          unzip -t "$package"
+          mkdir verify
+          unzip -q "$package" -d verify
+          app="verify/MonyaCode.app"
+          plutil -extract CFBundleIconFile raw "$app/Contents/Info.plist" | grep -qx 'MonyaCode.icns'
+          test -s "$app/Contents/Resources/MonyaCode.icns"
+          codesign --verify --deep --strict "$app"
       - uses: actions/upload-artifact@v4
         with:
           name: MonyaCode-${{ env.RELEASE_VERSION }}-macos-${{ matrix.arch }}

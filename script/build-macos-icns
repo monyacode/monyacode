@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+output="${1:-}"
+if [[ -z "$output" ]]; then
+    echo "Usage: ${0##*/} <output.icns>" >&2
+    exit 2
+fi
+
+source_image="assets/images/monyacode-logo.png"
+for tool in sips iconutil; do
+    if ! command -v "$tool" >/dev/null; then
+        echo "${0##*/} requires $tool (macOS only)." >&2
+        exit 1
+    fi
+done
+
+if [[ ! -f "$source_image" ]]; then
+    echo "Missing icon source: $source_image" >&2
+    exit 1
+fi
+
+temporary_directory="$(mktemp -d "${TMPDIR:-/tmp}/monyacode-icon.XXXXXX")"
+iconset="$temporary_directory/AppIcon.iconset"
+cleanup() { rm -rf "$temporary_directory"; }
+trap cleanup EXIT
+
+mkdir -p "$iconset" "$(dirname "$output")"
+for spec in \
+    '16 icon_16x16.png' \
+    '32 icon_16x16@2x.png' \
+    '32 icon_32x32.png' \
+    '64 icon_32x32@2x.png' \
+    '128 icon_128x128.png' \
+    '256 icon_128x128@2x.png' \
+    '256 icon_256x256.png' \
+    '512 icon_256x256@2x.png' \
+    '512 icon_512x512.png' \
+    '1024 icon_512x512@2x.png'; do
+    read -r pixels filename <<<"$spec"
+    sips --resampleHeightWidth "$pixels" "$pixels" "$source_image" --out "$iconset/$filename" >/dev/null
+done
+
+iconutil --convert icns --output "$output" "$iconset"
+test -s "$output"

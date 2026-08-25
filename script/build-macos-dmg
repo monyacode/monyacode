@@ -34,7 +34,7 @@ rm -rf "$app" "$dmg_dir" "$dmg"
 mkdir -p "$app/Contents/MacOS" "$app/Contents/Resources" "$dmg_dir"
 cp "$root/monyacode" "$app/Contents/MacOS/MonyaCode"
 cp "$root/cli" "$app/Contents/MacOS/cli"
-cp crates/monyacode/resources/app-icon@2x.png "$app/Contents/Resources/MonyaCode.png"
+./script/build-macos-icns "$app/Contents/Resources/MonyaCode.icns"
 chmod 0755 "$app/Contents/MacOS/MonyaCode" "$app/Contents/MacOS/cli"
 if [[ -x /usr/bin/git ]]; then
     cp /usr/bin/git "$app/Contents/MacOS/git"
@@ -50,13 +50,19 @@ cat > "$app/Contents/Info.plist" <<PLIST
 <key>CFBundleExecutable</key><string>MonyaCode</string>
 <key>CFBundleIdentifier</key><string>app.liten.MonyaCode</string>
 <key>CFBundlePackageType</key><string>APPL</string>
-<key>CFBundleIconFile</key><string>MonyaCode.png</string>
+<key>CFBundleIconFile</key><string>MonyaCode.icns</string>
 <key>CFBundleVersion</key><string>0.1.0-local</string>
 <key>CFBundleShortVersionString</key><string>0.1.0-local</string>
 <key>LSMinimumSystemVersion</key><string>10.15.7</string>
 <key>CFBundleURLTypes</key><array><dict><key>CFBundleURLSchemes</key><array><string>monyacode</string></array></dict></array>
 </dict></plist>
 PLIST
+
+# Sign after the complete bundle, including its icon and Info.plist, exists.
+# This is ad-hoc for local builds. Distribution releases replace it with a
+# Developer ID signature and notarization when credentials are configured.
+codesign --force --deep --sign - "$app"
+codesign --verify --deep --strict "$app"
 
 mv "$app" "$dmg_dir/MonyaCode.app"
 ln -s /Applications "$dmg_dir/Applications"
