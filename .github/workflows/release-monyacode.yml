@@ -170,7 +170,8 @@ jobs:
           CONTROL
           dpkg-deb --build --root-owner-group "$package" "MonyaCode-${version}-linux-${{ matrix.arch }}.deb"
           dpkg-deb --info "MonyaCode-${version}-linux-${{ matrix.arch }}.deb"
-          dpkg-deb --contents "MonyaCode-${version}-linux-${{ matrix.arch }}.deb" | grep -q 'monyacode-editor'
+          dpkg-deb --contents "MonyaCode-${version}-linux-${{ matrix.arch }}.deb" > package-contents.txt
+          grep -q 'monyacode-editor' package-contents.txt
       - uses: actions/upload-artifact@v4
         with:
           name: MonyaCode-${{ env.RELEASE_VERSION }}-linux-${{ matrix.arch }}
